@@ -2,6 +2,7 @@ import { LIEUX_BASE, PHYSIQUE_PEUPLES, lieuKey, getDistances } from "../data/lie
 import { PROFIL_DIRECTIVE, profilNarratif } from "../data/narration.js";
 import { PEUPLES, METIERS } from "../data/peuples.js";
 import { randomPrenom } from "../data/prenoms.js";
+import { buildLoreCtx } from "../data/lore.js";
 
 export function initHero(peuple, metier, nom, genre) {
   const lieu = peuple.lieu[Math.floor(Math.random() * peuple.lieu.length)];
@@ -113,12 +114,20 @@ export function buildCtx(hero, world, hist) {
   const fils = (world.fils || []).slice(-4);
   if (fils.length) parts.push("en_suspens=[" + fils.join(" | ") + "]");
 
+  // Lieu physique
   if (region) {
     parts.push("");
-    parts.push("R\u00c9GION " + hero.lieu.toUpperCase());
+    parts.push("LIEU \u2014 " + hero.lieu.toUpperCase());
     parts.push("physique=[" + region.physique + "]");
     parts.push("ambiance=[" + region.ambiance + "]");
     parts.push("danger=[" + region.danger + "]");
+  }
+
+  // Lore contextuel (r\u00e9gion + peuple + monde + cr\u00e9atures)
+  const lore = buildLoreCtx(hero.lieu, hero.peuple.id, profil);
+  if (lore) {
+    parts.push("");
+    parts.push(lore);
   }
 
   const lieuData = (world.lieux || {})[key];
