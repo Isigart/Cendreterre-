@@ -20,14 +20,14 @@ export default function GameScreen({
   }, [prose, streaming]);
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
 
       {/* Header */}
       <div style={{
         borderBottom: "1px solid " + C.dim,
-        padding: "0.8rem 1.5rem",
+        padding: "0.8rem 1rem",
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        flexShrink: 0,
+        flexShrink: 0, boxSizing: "border-box", width: "100%",
       }}>
         <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, minWidth: 0 }}>
           <span style={{ fontSize: 13, color: C.accent, fontStyle: "italic" }}>{hero?.nom}</span>
@@ -59,7 +59,7 @@ export default function GameScreen({
       </div>
 
       {/* Prose area */}
-      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", maxWidth: 620, width: "100%", margin: "0 auto", padding: "2rem 1.5rem 4rem" }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", maxWidth: 620, width: "100%", margin: "0 auto", padding: "2rem 1rem 4rem", boxSizing: "border-box" }}>
 
         {going && !prose && (
           <div style={{ textAlign: "center", padding: "4rem 0", color: C.dim, fontSize: 24 }} className="pulse">{"···"}</div>

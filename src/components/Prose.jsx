@@ -3,7 +3,7 @@ import { C } from "../styles/theme.js";
 export default function Prose({ text, streaming }) {
   const paras = text.split("\n\n").filter(p => p.trim());
   return (
-    <div>
+    <div style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
       {paras.map((p, i) => (
         <p key={i} style={{
           fontSize: "clamp(16px,2.5vw,18px)",
