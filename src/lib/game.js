@@ -13,6 +13,8 @@ export function initHero(peuple, metier, nom, genre) {
     magie: peuple.magie,
     lieu,
     lieuxVisites: [lieuKey(lieu)],
+    jour: 1,
+    moment: "matin",
     traits: {
       public:  [],
       stats:   metier ? [metier.desc] : [],
@@ -50,6 +52,7 @@ export function buildCtx(hero, world, hist) {
   }
   parts.push("magie=" + hero.magie + (hero.metier ? "" : " \u2014 existe mais le h\u00e9ros ne sait pas s'en servir"));
   parts.push("lieu_actuel=" + hero.lieu + " \u2014 le h\u00e9ros y est, ne pas d\u00e9placer sans intention explicite");
+  parts.push("temps=jour " + (hero.jour || 1) + ", " + (hero.moment || "matin"));
   parts.push("scene=" + (hero.sceneCount || 0));
   if (hero.physique) parts.push("physique=" + hero.physique);
   if (hero.humeur)   parts.push("humeur=" + hero.humeur);
@@ -213,6 +216,10 @@ export function applyFd(hero, fd) {
       .filter(o => !fd.inventaire_del.includes(o));
   }
 
+  if (fd.moment) next.moment = fd.moment;
+  if (fd.jours_ecoules) {
+    next.jour = (hero.jour || 1) + fd.jours_ecoules;
+  }
   if (fd.lieu) {
     next.lieu = fd.lieu;
     const visited = new Set(hero.lieuxVisites || []);
