@@ -170,7 +170,7 @@ export function buildHint(txt) {
   const t = txt.toLowerCase();
 
   if (/partir|voyage|route|rejoindre|me rendre|aller \u00e0|aller a|se diriger|traverser|marcher vers|quitter|fuir vers/.test(t))
-    return "[VOYAGE] " + txt + "\n\u2192 Joue l'arc complet du voyage. Les distances sont dans le CTX (distances=[...]). Calibre la dur\u00e9e et les \u00e9v\u00e9nements en cons\u00e9quence. Les \u00e9v\u00e9nements ordinaires passent dans la prose sans s'arr\u00eater. Tu t'arr\u00eates uniquement si quelque chose de critique \u00e9merge \u2014 un choix r\u00e9el, un danger, une information qui change tout. Sinon on arrive \u00e0 destination.";
+    return "[VOYAGE] " + txt + "\n\u2192 Consulte distances=[...] dans le CTX. Le champ [terrain] d\u00e9crit les \u00e9tapes du trajet \u2014 utilise-le. Joue le voyage avec la dur\u00e9e r\u00e9elle (en jours). Le terrain change en route : d\u00e9cris bri\u00e8vement chaque \u00e9tape travers\u00e9e. Les \u00e9v\u00e9nements ordinaires passent vite. Arr\u00eate-toi si quelque chose de critique \u00e9merge (danger, rencontre, choix). Sinon, arrive \u00e0 destination. Mets \u00e0 jour fd.lieu uniquement quand le h\u00e9ros arrive vraiment.";
 
   if (/attaquer|frapper|tirer|combattre|se battre|assommer|d\u00e9gainer|charger|foncer sur|affronter/.test(t))
     return "[COMBAT] " + txt + "\n\u2192 Joue jusqu'\u00e0 r\u00e9solution claire \u2014 victoire, d\u00e9faite, fuite, impasse. Pas s'arr\u00eater \u00e0 chaque coup. S'arr\u00eater si un choix moral ou une bifurcation r\u00e9elle \u00e9merge.";
