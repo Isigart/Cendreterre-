@@ -11,7 +11,7 @@ export const PEUPLES = [
     nom: "Sonneur",
     desc: "Au c\u0153ur des montagnes du nord. Leur lien avec la terre est particulier \u2014 ils chantent, elle \u00e9coute. Ce qui se passe dans les profondeurs ne regarde qu'eux.",
     magie: "Vibrations \u2014 le chant qui parle \u00e0 la terre",
-    lieu: ["Pierrelong", "Hauts Plateaux"],
+    lieu: ["Le Puits", "Pierrelong", "Hauts Plateaux"],
   },
   {
     id: "sylvain",
