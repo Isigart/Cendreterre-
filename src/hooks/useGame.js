@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { loadHero, saveHero, delHero, loadWorld, saveWorld } from "../lib/storage.js";
+import { loadHero, saveHero, delHero, loadWorld, saveWorld, getPlayerCode, setPlayerCode, loadFromServer } from "../lib/storage.js";
 import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
@@ -63,28 +63,54 @@ export default function useGame() {
 
   // Initial load
   useEffect(() => {
-    Promise.all([loadHero(), loadWorld()]).then(([savedHero, savedWorld]) => {
-      if (savedWorld) worldRef.current = savedWorld;
-      if (savedHero && savedHero.vivant) {
-        heroRef.current = savedHero;
-        histRef.current = savedHero.hist || [];
-        setHero(savedHero);
-        if ((savedHero.sceneCount || 0) > 0) {
-          setProse(buildResumeProse(savedHero));
-          setScreen("jeu");
-          return;
+    const code = getPlayerCode();
+    if (!code) {
+      setScreen("code");
+      return;
+    }
+    initFromStorage();
+  }, []);
+
+  async function initFromStorage() {
+    let [savedHero, savedWorld] = await Promise.all([loadHero(), loadWorld()]);
+
+    // Si localStorage vide mais code pr\u00e9sent, essayer le serveur
+    if (!savedHero && !savedWorld) {
+      const code = getPlayerCode();
+      if (code) {
+        const serverData = await loadFromServer(code);
+        if (serverData) {
+          savedHero = serverData.hero;
+          savedWorld = serverData.world;
         }
       }
-      const cles = (worldRef.current.cles) || {};
-      const hasCles = Object.keys(cles).some(k => cles[k]);
-      const hasHero = savedHero && savedHero.vivant;
-      if (!hasCles && !hasHero) {
-        setScreen("premier_reve");
-      } else {
-        setScreen("intro");
+    }
+
+    if (savedWorld) worldRef.current = savedWorld;
+    if (savedHero && savedHero.vivant) {
+      heroRef.current = savedHero;
+      histRef.current = savedHero.hist || [];
+      setHero(savedHero);
+      if ((savedHero.sceneCount || 0) > 0) {
+        setProse(buildResumeProse(savedHero));
+        setScreen("jeu");
+        return;
       }
-    });
-  }, []);
+    }
+    const cles = (worldRef.current.cles) || {};
+    const hasCles = Object.keys(cles).some(k => cles[k]);
+    const hasHero = savedHero && savedHero.vivant;
+    if (!hasCles && !hasHero) {
+      setScreen("premier_reve");
+    } else {
+      setScreen("intro");
+    }
+  }
+
+  function handleCode(code) {
+    setPlayerCode(code);
+    initFromStorage();
+  }
 
   function handleIntro(action) {
     if (action === "reprendre" && heroRef.current) {
@@ -270,6 +296,7 @@ export default function useGame() {
     worldRef,
 
     // Actions
+    handleCode,
     handleIntro,
     handlePremierNom,
     choisirPeuple,

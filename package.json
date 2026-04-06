@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@preact/compat": "^18.3.2",
+    "@upstash/redis": "^1.37.0",
     "preact": "^10.29.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"

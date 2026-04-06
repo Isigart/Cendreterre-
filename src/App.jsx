@@ -7,6 +7,7 @@ import PeupleScreen from "./components/PeupleScreen.jsx";
 import MetierScreen from "./components/MetierScreen.jsx";
 import NomScreen from "./components/NomScreen.jsx";
 import GameScreen from "./components/GameScreen.jsx";
+import CodeScreen from "./components/CodeScreen.jsx";
 
 export default function App() {
   const game = useGame();
@@ -19,6 +20,10 @@ export default function App() {
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif", color: C.text }}>
+
+      {game.screen === "code" && (
+        <CodeScreen onCode={game.handleCode} />
+      )}
 
       {game.screen === "premier_reve" && (
         <PremierReve onNom={game.handlePremierNom} />
