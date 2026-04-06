@@ -15,7 +15,7 @@ export function initHero(peuple, metier, nom, genre) {
     lieuxVisites: [lieuKey(lieu)],
     jour: 1,
     moment: "matin",
-    conditions: ["affam\u00e9", "assoiff\u00e9", "d\u00e9sorient\u00e9"],
+    conditions: metier ? ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re"] : ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re", "d\u00e9sorient\u00e9"],
     traits: {
       public:  [],
       stats:   metier ? [metier.desc] : [],

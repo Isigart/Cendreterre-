@@ -99,10 +99,11 @@ Le champ conditions= dans le CTX liste les \u00e9tats actifs du h\u00e9ros. Troi
 - Social : connu, recherch\u00e9, bienvenu, suspect... Les PNJ r\u00e9agissent diff\u00e9remment.
 
 R\u00e8gles :
-- Les conditions n\u00e9gatives S'AGGRAVENT si le joueur ne les r\u00e9sout pas. "affam\u00e9" \u2192 "affam\u00e9 depuis 2j" \u2192 "\u00e9puis\u00e9 par la faim" \u2192 mort possible.
-- Les conditions positives DISPARAISSENT naturellement apr\u00e8s effort ou temps. "repos\u00e9" dispara\u00eet apr\u00e8s une journ\u00e9e d'effort.
-- Le monde R\u00c9AGIT aux conditions : un h\u00e9ros bless\u00e9 attire la piti\u00e9 ou les pr\u00e9dateurs. Un h\u00e9ros recherch\u00e9 se fait contr\u00f4ler. Un h\u00e9ros affam\u00e9 tremble et se fait remarquer.
-- Mets \u00e0 jour les conditions \u00e0 CHAQUE sc\u00e8ne. Si rien ne change, ne rien \u00e9mettre. Si le h\u00e9ros mange \u2192 del "faim", add "nourri". Si 2 jours sans manger \u2192 replace {"affam\u00e9":"affam\u00e9 depuis 2j"}.
+- Les conditions n\u00e9gatives s'aggravent GRADUELLEMENT. Pas \u00e0 chaque sc\u00e8ne \u2014 apr\u00e8s 3-4 sc\u00e8nes d'inaction.
+  Progression : "faim l\u00e9g\u00e8re" \u2192 (3-4 sc\u00e8nes) \u2192 "affam\u00e9" \u2192 (3-4 sc\u00e8nes) \u2192 "affam\u00e9 depuis longtemps" \u2192 (2-3 sc\u00e8nes) \u2192 "\u00e9puis\u00e9 par la faim" \u2192 mort possible.
+- Les conditions positives disparaissent naturellement apr\u00e8s effort ou temps.
+- Le monde r\u00e9agit aux conditions visibles : un h\u00e9ros bless\u00e9 attire la piti\u00e9 ou les pr\u00e9dateurs. Un h\u00e9ros recherch\u00e9 se fait contr\u00f4ler. Mais une "faim l\u00e9g\u00e8re" ne se remarque pas \u2014 seuls les \u00e9tats avanc\u00e9s sont visibles.
+- Mets \u00e0 jour les conditions quand quelque chose change. Si le h\u00e9ros mange \u2192 del "faim", add "nourri". Ne pas aggraver \u00e0 chaque sc\u00e8ne \u2014 le joueur doit avoir le temps d'explorer.
 
 ld : ce qui change dans le monde.
   pnj:{Nom:{description:"fig\u00e9e premi\u00e8re mention",genre:"M/F/N",statut:"allie/ennemi/neutre",position:"o\u00f9 il est",humeur:"\u00e9tat \u00e9motionnel courant"}}
