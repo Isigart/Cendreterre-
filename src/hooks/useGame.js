@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { loadHero, saveHero, delHero, loadWorld, saveWorld } from "../lib/storage.js";
-import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles } from "../lib/game.js";
+import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
 import { OUVERTURE_SURVIE } from "../data/narration.js";
@@ -164,7 +164,19 @@ export default function useGame() {
         );
       }
 
-      const newHist = skipHist ? histRef.current : [...histRef.current, snapshot].slice(-6);
+      let newHist = skipHist ? histRef.current : [...histRef.current, snapshot];
+
+      // Compression d'arc : quand l'historique d\u00e9passe 8, compresser les plus anciens
+      if (newHist.length > 8) {
+        const toCompress = newHist.slice(0, newHist.length - 6);
+        const sceneStart = Math.max(0, (newHero.sceneCount || 0) - newHist.length);
+        const arc = compressArc(toCompress, sceneStart);
+        if (arc) {
+          newHero = { ...newHero, arcs: [...(newHero.arcs || []), arc].slice(-5) };
+        }
+        newHist = newHist.slice(-6);
+      }
+
       histRef.current = newHist;
 
       newHero = {

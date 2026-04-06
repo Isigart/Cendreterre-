@@ -17,6 +17,7 @@ export function initHero(peuple, metier, nom, genre) {
     lieuxVisites: [lieuKey(lieu)],
     jour: 1,
     moment: "matin",
+    arcs: [],
     conditions: metier ? ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re"] : ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re", "d\u00e9sorient\u00e9"],
     traits: {
       public:  [],
@@ -158,6 +159,14 @@ export function buildCtx(hero, world, hist, intention) {
 
   parts.push("");
   parts.push("HISTORIQUE");
+
+  // Arcs compress\u00e9s (pass\u00e9 lointain)
+  const arcs = hero.arcs || [];
+  if (arcs.length) {
+    parts.push("PASS\u00c9 LOINTAIN");
+    arcs.forEach(a => parts.push("\u25aa " + a));
+    parts.push("");
+  }
 
   if (!hist.length) {
     parts.push("premi\u00e8re sc\u00e8ne");
@@ -343,6 +352,36 @@ export function applyLd(world, ld) {
     next.evt = { ...(world.evt || {}), ["evt_" + Date.now()]: ld.evt };
 
   return next;
+}
+
+export function compressArc(hist, sceneStart) {
+  if (!hist.length) return null;
+  const parts = [];
+  parts.push("sc\u00e8nes " + sceneStart + "-" + (sceneStart + hist.length - 1));
+
+  // Lieux visit\u00e9s dans cet arc
+  const lieux = [...new Set(hist.map(s => typeof s === "string" ? null : s.lieu).filter(Boolean))];
+  if (lieux.length) parts.push("lieux: " + lieux.join(", "));
+
+  // PNJ rencontr\u00e9s
+  const pnjs = [...new Set(hist.flatMap(s => (typeof s === "object" && s.pnj) ? s.pnj : []))];
+  if (pnjs.length) parts.push("pnj: " + pnjs.slice(0, 5).join(", "));
+
+  // Cons\u00e9quences accumul\u00e9es
+  const conseqs = [...new Set(hist.flatMap(s => (typeof s === "object" && s.consequences) ? s.consequences : []))];
+  if (conseqs.length) parts.push("faits: " + conseqs.join(" | "));
+
+  // R\u00e9sum\u00e9 des intentions et prose
+  const moments = hist.map(s => {
+    if (typeof s === "string") return s;
+    const bits = [];
+    if (s.intention) bits.push(s.intention);
+    if (s.prose) bits.push(s.prose.slice(0, 80));
+    return bits.join(" \u2192 ");
+  }).filter(Boolean);
+  if (moments.length) parts.push("r\u00e9sum\u00e9: " + moments.join(" | "));
+
+  return parts.join(" / ");
 }
 
 export function buildLegacy(hero) {
