@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { C } from "../styles/theme.js";
 import { PEUPLES } from "../data/peuples.js";
 import Prose from "./Prose.jsx";
@@ -8,8 +9,18 @@ export default function GameScreen({
   pendingDeath, deadHero,
   onPlay, onQuit, onCancelQuit, onEndReve, onNewDream, onReset,
 }) {
+  const scrollRef = useRef(null);
+  const bottomRef = useRef(null);
+
+  // Auto-scroll pendant le streaming
+  useEffect(() => {
+    if (streaming && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [prose, streaming]);
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}>
 
       {/* Header */}
       <div style={{
@@ -42,7 +53,7 @@ export default function GameScreen({
       </div>
 
       {/* Prose area */}
-      <div style={{ flex: 1, overflowY: "auto", maxWidth: 620, width: "100%", margin: "0 auto", padding: "2rem 1.5rem 4rem" }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", maxWidth: 620, width: "100%", margin: "0 auto", padding: "2rem 1.5rem 4rem" }}>
 
         {going && !prose && (
           <div style={{ textAlign: "center", padding: "4rem 0", color: C.dim, fontSize: 24 }} className="pulse">{"···"}</div>
@@ -140,6 +151,7 @@ export default function GameScreen({
             </button>
           </div>
         )}
+        <div ref={bottomRef} />
       </div>
     </div>
   );
