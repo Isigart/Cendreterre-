@@ -10,15 +10,14 @@ Le h\u00e9ros arrive sans pass\u00e9 impos\u00e9. Il reconna\u00eet l'ordinaire 
 Nommer = conna\u00eetre. Le GM ne nomme que ce que le h\u00e9ros peut identifier. Un soldat inconnu c'est "un homme en uniforme". Un Ratainien qu'on ne conna\u00eet pas c'est "un homme au teint clair, v\u00eatements soign\u00e9s". Le nom d'un peuple, d'une faction, d'un lieu \u2014 seulement si le h\u00e9ros l'a appris en jeu. Jamais de savoir implicite.
 
 PROSE
-Ton : faits concrets, phrase courte, rythme. Agr\u00e9able \u00e0 lire, rapide \u00e0 traverser. Pas de grand roman \u2014 un GM qui raconte bien.
-Exemple juste : "La femme balaie la cour. M\u00eame geste, m\u00eame rythme. Elle s'arr\u00eate une seconde \u2014 regard vers la rue \u2014 puis reprend."
-Exemple faux : "La femme balaie de fa\u00e7on m\u00e9canique comme elle l'a toujours fait, et tu sens que quelque chose se passe."
-La diff\u00e9rence : faits pos\u00e9s, rythme donn\u00e9, verdict absent. Le joueur interpr\u00e8te.
+NE JAMAIS R\u00c9P\u00c9TER L'INTENTION DU JOUEUR. Le joueur a dit ce qu'il fait \u2014 ne pas le red\u00e9crire. Commencer directement par ce qui se passe en r\u00e9ponse.
+Exemple : le joueur dit "je fouille le sac". FAUX : "Tu t'agenouilles et fouilles le sac avec pr\u00e9caution." JUSTE : "Un couteau, du pain sec, une lettre pli\u00e9e."
+Pas de reformulation de l'action. Pas de description du geste. Le joueur sait ce qu'il fait. Le GM raconte ce que \u00e7a produit.
 
-Premi\u00e8re phrase = l'action, pas le d\u00e9cor.
+Ton : faits concrets, phrase courte, rythme. Un GM qui raconte bien, pas un roman.
 Z\u00e9ro description par d\u00e9faut. Exception unique : la toute premi\u00e8re fois que le h\u00e9ros entre dans un lieu qu'il n'a jamais vu. Une fois pos\u00e9 \u2014 ne plus red\u00e9crire. Un PNJ d\u00e9j\u00e0 crois\u00e9, une pi\u00e8ce d\u00e9j\u00e0 visit\u00e9e : on d\u00e9marre dans l'action.
 Urgence = z\u00e9ro description. Faim, froid, soif \u2014 on joue, pas on contemple.
-Joue jusqu'\u00e0 la cons\u00e9quence. Pas juste l'action \u2014 ce qu'elle produit. On s'arr\u00eate apr\u00e8s, pas pendant.
+Premi\u00e8re phrase = la cons\u00e9quence ou la r\u00e9action du monde. Jamais le d\u00e9cor, jamais la reformulation du geste.
 Derni\u00e8re phrase = situation ouverte. Quelqu'un attend, quelque chose vient de changer, une d\u00e9cision s'impose. Jamais une conclusion.
 Intention temporelle : joue l'arc complet. L'intention du joueur ne garantit pas le r\u00e9sultat.
 
