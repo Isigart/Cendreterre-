@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { loadHero, saveHero, delHero, loadWorld, saveWorld, getPlayerCode, setPlayerCode, loadFromServer } from "../lib/storage.js";
-import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
+import { loadHero, loadHeroes, saveHero, saveHeroes, delHero, loadWorld, saveWorld, getPlayerCode, setPlayerCode, loadFromServer, getActiveHeroId, setActiveHeroId } from "../lib/storage.js";
+import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, applyTime, applyInactiveTime, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
 import { validateFd, validateLd } from "../lib/validate.js";
@@ -51,6 +51,7 @@ function buildResumeProse(hero) {
 export default function useGame() {
   const [screen, setScreen] = useState("loading");
   const [hero, setHero] = useState(null);
+  const [heroes, setHeroes] = useState([]);
   const [world, setWorld] = useState(EMPTY_WORLD);
   const [deadHero, setDeadHero] = useState(null);
   const [pendingDeath, setPendingDeath] = useState(null);
@@ -79,35 +80,58 @@ export default function useGame() {
   }, []);
 
   async function initFromStorage() {
-    let [savedHero, savedWorld] = await Promise.all([loadHero(), loadWorld()]);
+    let [savedHeroes, savedWorld] = await Promise.all([loadHeroes(), loadWorld()]);
+
+    // Compat ancien format mono-h\u00e9ros
+    if ((!savedHeroes || !savedHeroes.length)) {
+      const oldHero = await loadHero();
+      if (oldHero) {
+        if (!oldHero.id) oldHero.id = "hero_" + Date.now();
+        savedHeroes = [oldHero];
+      }
+    }
 
     // Si localStorage vide mais code pr\u00e9sent, essayer le serveur
-    if (!savedHero && !savedWorld) {
+    if ((!savedHeroes || !savedHeroes.length) && !savedWorld) {
       const code = getPlayerCode();
       if (code) {
         const serverData = await loadFromServer(code);
         if (serverData) {
-          savedHero = serverData.hero;
+          if (Array.isArray(serverData.hero)) savedHeroes = serverData.hero;
+          else if (serverData.hero) savedHeroes = [serverData.hero];
           savedWorld = serverData.world;
         }
       }
     }
 
-    if (savedWorld) worldRef.current = savedWorld;
-    if (savedHero && savedHero.vivant) {
-      heroRef.current = savedHero;
-      histRef.current = savedHero.hist || [];
-      setHero(savedHero);
-      if ((savedHero.sceneCount || 0) > 0) {
-        setProse(buildResumeProse(savedHero));
+    if (savedWorld) {
+      // Init temps sur le world si absent
+      if (!savedWorld.jour) savedWorld.jour = 1;
+      if (!savedWorld.moment) savedWorld.moment = "matin";
+      worldRef.current = savedWorld;
+    }
+
+    const livingHeroes = (savedHeroes || []).filter(h => h.vivant);
+    setHeroes(livingHeroes);
+
+    // Reprendre le h\u00e9ros actif
+    const activeId = getActiveHeroId();
+    const activeHero = livingHeroes.find(h => h.id === activeId) || livingHeroes[0];
+
+    if (activeHero) {
+      heroRef.current = activeHero;
+      histRef.current = activeHero.hist || [];
+      setHero(activeHero);
+      if ((activeHero.sceneCount || 0) > 0) {
+        setProse(buildResumeProse(activeHero));
         setScreen("jeu");
         return;
       }
     }
     const cles = (worldRef.current.cles) || {};
     const hasCles = Object.keys(cles).some(k => cles[k]);
-    const hasHero = savedHero && savedHero.vivant;
-    if (!hasCles && !hasHero) {
+    const hasHeroes = livingHeroes.length > 0;
+    if (!hasCles && !hasHeroes) {
       setScreen("premier_reve");
     } else {
       setScreen("intro");
@@ -133,11 +157,19 @@ export default function useGame() {
     setPendingPeuple(peuple);
     setPendingMetier(null);
     const h = initHero(peuple, null, nom, null);
+    h.id = "hero_" + Date.now();
     h.clesDepart = { ...worldRef.current.cles };
+    h.lastActiveJour = worldRef.current.jour || 1;
+    // Init world time si premier h\u00e9ros
+    if (!worldRef.current.jour) {
+      worldRef.current = { ...worldRef.current, jour: 1, moment: "matin" };
+    }
     heroRef.current = h;
     histRef.current = [];
     setHero(h);
+    setHeroes(prev => [...prev, h]);
     saveHero(h);
+    saveWorld(worldRef.current);
     setErr(null); setRateLimit(false);
     setScreen("jeu");
     playScene(OUVERTURE_SURVIE, "ouverture", false);
@@ -154,11 +186,19 @@ export default function useGame() {
   }
 
   async function confirmerHero(nom, genre) {
+    const allHeroes = await loadHeroes();
+    if (allHeroes.filter(h => h.vivant).length >= 3) {
+      setErr("Maximum 3 r\u00eaveurs en parall\u00e8le.");
+      return;
+    }
     const h = initHero(pendingPeuple, pendingMetier, nom, genre);
+    h.id = "hero_" + Date.now();
     h.clesDepart = { ...worldRef.current.cles };
+    h.lastActiveJour = worldRef.current.jour || 1;
     heroRef.current = h;
     histRef.current = [];
     setHero(h);
+    setHeroes(prev => [...prev, h]);
     await saveHero(h);
     setProse(""); setErr(null); setRateLimit(false);
     setScreen("jeu");
@@ -203,7 +243,9 @@ export default function useGame() {
 
       if (!skipHist) {
         let newWorld = applyLd(worldRef.current, ld);
+        newWorld = applyTime(newWorld, fd);
         newWorld = { ...newWorld, cles: computeAutoCles(newHero, newWorld) };
+        newHero.lastActiveJour = newWorld.jour;
         worldRef.current = newWorld;
         setWorld(newWorld);
         await saveWorld(newWorld);
@@ -258,6 +300,38 @@ export default function useGame() {
     }
   }
 
+  async function switchHero(heroId) {
+    // Sauvegarder le h\u00e9ros actuel
+    if (heroRef.current) {
+      heroRef.current.lastActiveJour = worldRef.current.jour || 1;
+      await saveHero(heroRef.current);
+    }
+
+    // Charger le h\u00e9ros cible
+    const allHeroes = await loadHeroes();
+    const target = allHeroes.find(h => h.id === heroId);
+    if (!target || !target.vivant) return;
+
+    // Appliquer le temps \u00e9coul\u00e9 pendant l'inactivit\u00e9
+    const joursEcoules = (worldRef.current.jour || 1) - (target.lastActiveJour || 1);
+    const updated = applyInactiveTime(target, joursEcoules);
+    updated.lastActiveJour = worldRef.current.jour || 1;
+
+    heroRef.current = updated;
+    histRef.current = updated.hist || [];
+    lastProseRef.current = null;
+    setHero(updated);
+    setActiveHeroId(heroId);
+    await saveHero(updated);
+
+    setProse(buildResumeProse(updated));
+    setPendingDeath(null);
+    setDeadHero(null);
+    setErr(null);
+    setRateLimit(false);
+    setScreen("jeu");
+  }
+
   async function handleEndReve(type) {
     const h = heroRef.current;
     if (!h) return;
@@ -273,13 +347,18 @@ export default function useGame() {
     worldRef.current = newWorld;
     setWorld(newWorld);
     await saveWorld(newWorld);
-    await delHero();
+    await delHero(h.id);
     heroRef.current = null;
     histRef.current = [];
+    lastProseRef.current = null;
+
+    // Mettre \u00e0 jour la liste des h\u00e9ros vivants
+    const remaining = heroes.filter(x => x.id !== h.id);
+    setHeroes(remaining);
 
     setHero(null);
     setPendingDeath(null);
-    setDeadHero({ ...h, statut: legacy.statut, nouveauxDeblocages: nouveaux });
+    setDeadHero({ ...h, statut: legacy.statut, nouveauxDeblocages: nouveaux, remainingHeroes: remaining });
   }
 
   async function reset() {
@@ -297,7 +376,7 @@ export default function useGame() {
 
   return {
     // State
-    screen, hero, world, deadHero, pendingDeath,
+    screen, hero, heroes, world, deadHero, pendingDeath,
     prose, streaming, going, err, rateLimit,
     pendingPeuple, pendingMetier,
     worldRef,
@@ -305,6 +384,7 @@ export default function useGame() {
     // Actions
     handleCode,
     handleIntro,
+    switchHero,
     handlePremierNom,
     choisirPeuple,
     choisirMetier,
