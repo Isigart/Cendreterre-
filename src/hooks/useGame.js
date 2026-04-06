@@ -38,7 +38,10 @@ export default function useGame() {
         setHero(savedHero);
         if ((savedHero.sceneCount || 0) > 0) {
           const dernierSnippet = (savedHero.hist || []).slice(-1)[0];
-          if (dernierSnippet) setProse("[ \u2026 ]\n\n" + dernierSnippet + "\n\n\u2014");
+          if (dernierSnippet) {
+            const txt = typeof dernierSnippet === "string" ? dernierSnippet : dernierSnippet.prose || "";
+            if (txt) setProse("[ \u2026 ]\n\n" + txt + "\n\n\u2014");
+          }
           setScreen("jeu");
           return;
         }
@@ -57,7 +60,9 @@ export default function useGame() {
   function handleIntro(action) {
     if (action === "reprendre" && heroRef.current) {
       setScreen("jeu");
-      const snippets = histRef.current.slice(-2);
+      const snippets = histRef.current.slice(-2).map(s =>
+        typeof s === "string" ? s : s.prose || ""
+      ).filter(Boolean);
       if (snippets.length) {
         setProse("[ \u2026 ]\n\n" + snippets.join("\n\n[ \u2026 ]\n\n") + "\n\n\u2014");
       } else {
