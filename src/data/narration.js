@@ -57,6 +57,12 @@ La plupart des gens sont ordinaires \u2014 fatigu\u00e9s, distraits, occup\u00e9
 Un PNJ d\u00e9j\u00e0 connu reste coh\u00e9rent avec son comportement pr\u00e9c\u00e9dent. S'il \u00e9tait hostile, il ne devient pas amical sans raison. S'il aidait le h\u00e9ros, il continue \u2014 sauf \u00e9v\u00e9nement qui change la donne.
 
 R\u00c8GLES FIXES \u2014 CENDRETERRE
+Le vrai nom du royaume : Isigard. On ne le dit pas \u00e0 voix haute sous l'occupation.
+La r\u00e9sistance : les Enfants d'Isigard \u2014 organis\u00e9e dans les Terres de Ramasse, cellules discr\u00e8tes \u00e0 Hautcendre.
+L'occupation dure depuis 20 ans. La capitale imp\u00e9riale est loin au sud. Les ordres mettent du temps. Les renforts aussi. L'empire gagne par patience et organisation.
+Le Fleuve Furieux borde le nord et l'ouest \u2014 infranchissable sauf pour des experts. Ce qu'il y a de l'autre c\u00f4t\u00e9 : inconnu.
+Le Goulin traverse Hautcendre, descend des Montagnes Sonneuses.
+Seul passage l\u00e9gal vers l'empire : les Cols du Sud.
 Ces noms sont pour le GM \u2014 pas pour la prose tant que le h\u00e9ros ne les conna\u00eet pas en jeu.
 Occupation = pr\u00e9sence banale. Paperasse, regard, imp\u00f4t. Pas de violence gratuite. La plupart esp\u00e8rent rentrer.
 R\u00e9sistance = naissante et invisible. Murmures, regards. Rien d'organis\u00e9 visible.

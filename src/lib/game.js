@@ -39,7 +39,7 @@ export function randomHero() {
   return initHero(peuple, metier, nom, genre);
 }
 
-export function buildCtx(hero, world, hist) {
+export function buildCtx(hero, world, hist, intention) {
   const key    = lieuKey(hero.lieu);
   const region = LIEUX_BASE[key] || null;
   const profil = profilNarratif(world);
@@ -109,8 +109,13 @@ export function buildCtx(hero, world, hist) {
     });
   if (objetsLieu.length) parts.push("objets=[" + objetsLieu.join(" | ") + "]");
 
-  const dists = getDistances(hero.lieu);
-  if (dists) parts.push("distances=[" + dists + "]");
+  // Distances uniquement si intention de voyage ou demande d'info
+  const intentionLower = (intention || "").toLowerCase();
+  const wantsTravel = /partir|voyage|route|rejoindre|me rendre|aller|diriger|traverser|marcher|quitter|fuir|loin|distance|combien|chemin|o\u00f9 aller/.test(intentionLower);
+  if (wantsTravel) {
+    const dists = getDistances(hero.lieu);
+    if (dists) parts.push("distances=[" + dists + "]");
+  }
 
   const fils = (world.fils || []).slice(-4);
   if (fils.length) parts.push("en_suspens=[" + fils.join(" | ") + "]");
@@ -125,7 +130,7 @@ export function buildCtx(hero, world, hist) {
   }
 
   // Lore contextuel (r\u00e9gion + peuple + monde + cr\u00e9atures)
-  const lore = buildLoreCtx(hero.lieu, hero.peuple.id, profil);
+  const lore = buildLoreCtx(hero.lieu, hero.peuple.id, profil, intention);
   if (lore) {
     parts.push("");
     parts.push(lore);

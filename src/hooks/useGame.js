@@ -117,8 +117,8 @@ export default function useGame() {
     setGoing(true); setErr(null); setRateLimit(false);
     setProse(""); setStreaming(true);
 
-    const ctx = buildCtx(h, worldRef.current, histRef.current);
     const intentionFinale = skipHist ? intention : buildHint(intention);
+    const ctx = buildCtx(h, worldRef.current, histRef.current, intention);
 
     try {
       const { prose: result, data } = await callLLM(ctx, intentionFinale, chunk => {
