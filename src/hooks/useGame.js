@@ -33,8 +33,15 @@ function buildResumeProse(hero) {
   const hist = hero.hist || [];
   const dernier = hist.slice(-1)[0];
   if (dernier) {
-    const txt = typeof dernier === "string" ? dernier : dernier.prose || "";
-    if (txt) parts.push("\nDernier souvenir \u2014 " + txt);
+    let txt = "";
+    if (typeof dernier === "string") {
+      txt = dernier;
+    } else if (dernier && typeof dernier === "object") {
+      txt = dernier.prose || dernier.intention || "";
+    }
+    if (txt && typeof txt === "string" && txt.length > 0) {
+      parts.push("\nDernier souvenir \u2014 " + txt);
+    }
   }
 
   parts.push("\n\u2014");
