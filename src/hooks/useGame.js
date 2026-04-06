@@ -265,7 +265,7 @@ export default function useGame() {
     const worldClesAvant = h.clesDepart || {};
     const nouveaux = computeNewUnlocks(worldRef.current.cles, worldClesAvant);
 
-    const legacy = buildLegacy(h);
+    const legacy = buildLegacy(h, worldRef.current);
     legacy.statut = type === "mort" ? "mort" : "vivant_quelque_part";
     legacy.nouveauxDeblocages = nouveaux;
 

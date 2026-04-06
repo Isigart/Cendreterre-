@@ -157,6 +157,27 @@ export function buildCtx(hero, world, hist, intention) {
     }
   }
 
+  // Legacy des h\u00e9ros pr\u00e9c\u00e9dents
+  const legacies = (world.legacy || []).slice(-3);
+  if (legacies.length) {
+    parts.push("");
+    parts.push("H\u00c9ROS PASS\u00c9S \u2014 le h\u00e9ros actuel ne les conna\u00eet pas, mais le monde se souvient");
+    legacies.forEach(l => {
+      const bits = [l.nom + " (" + l.peuple + ", " + (l.metier || "sans m\u00e9tier") + ")"];
+      bits.push(l.statut === "mort" ? "mort \u00e0 " + l.lieu : "disparu vers " + l.lieu);
+      if (l.faits?.length) bits.push("faits: " + l.faits.slice(-5).join(" | "));
+      if (l.pnj && Object.keys(l.pnj).length) {
+        const souvenirs = Object.entries(l.pnj)
+          .filter(([, p]) => p.souvenir)
+          .map(([, p]) => p.souvenir)
+          .slice(0, 4);
+        if (souvenirs.length) bits.push("souvenirs PNJ: " + souvenirs.join(" | "));
+      }
+      parts.push("\u25c6 " + bits.join(" / "));
+    });
+    parts.push("R\u00c8GLE : le h\u00e9ros actuel est un INCONNU. Les PNJ ne le confondent pas avec le pr\u00e9c\u00e9dent. Mais leur attitude a \u00e9t\u00e9 chang\u00e9e par lui. Un PNJ aid\u00e9 est plus ouvert. Un PNJ trahi est m\u00e9fiant. Les gens murmurent sur 'quelqu'un qui est pass\u00e9'.");
+  }
+
   parts.push("");
   parts.push("HISTORIQUE");
 
@@ -384,12 +405,36 @@ export function compressArc(hist, sceneStart) {
   return parts.join(" / ");
 }
 
-export function buildLegacy(hero) {
+export function buildLegacy(hero, world) {
+  // Construire un r\u00e9sum\u00e9 des actions marquantes depuis les arcs et l'historique
+  const faits = [];
+  (hero.arcs || []).forEach(arc => {
+    const match = arc.match(/faits:\s*(.+?)(?:\s*\/|$)/);
+    if (match) match[1].split(" | ").forEach(f => faits.push(f));
+  });
+  (world.consequences || []).forEach(c => faits.push(c));
+
+  // PNJ affect\u00e9s par ce h\u00e9ros
+  const pnjAffectes = {};
+  Object.entries(world.pnj || {}).forEach(([nom, p]) => {
+    if (p.statut && p.statut !== "neutre") {
+      pnjAffectes[nom] = {
+        statut: p.statut,
+        humeur: p.humeur || null,
+        souvenir: p.description ? nom + " \u2014 " + (p.statut === "allie" ? "aid\u00e9 par" : "m\u00e9fiant envers") + " le pr\u00e9c\u00e9dent \u00e9tranger" : null,
+      };
+    }
+  });
+
   return {
-    nom:    hero.nom,
-    peuple: hero.peuple?.nom || "?",
-    metier: hero.metier?.nom || "?",
-    lieu:   hero.lieu || "Cendreterre",
-    scenes: hero.sceneCount || 0,
+    nom:       hero.nom,
+    peuple:    hero.peuple?.nom || "?",
+    metier:    hero.metier?.nom || "?",
+    lieu:      hero.lieu || "Cendreterre",
+    scenes:    hero.sceneCount || 0,
+    faits:     faits.slice(-10),
+    pnj:       pnjAffectes,
+    conditions: hero.conditions || [],
+    inventaire: hero.inventaire || [],
   };
 }
