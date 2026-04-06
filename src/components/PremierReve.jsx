@@ -39,7 +39,7 @@ export default function PremierReve({ onNom }) {
           background: "transparent", border: "none",
           color: C.muted, fontSize: 9, letterSpacing: 3,
           textTransform: "uppercase", cursor: "pointer", fontFamily: "inherit",
-        }}>skip</button>
+        }}>{"skip"}</button>
       </div>
 
       {PROSE_REVE.slice(0, visible).map((p, i) => (
@@ -63,7 +63,7 @@ export default function PremierReve({ onNom }) {
           fontFamily: "inherit", marginTop: "1rem",
           animation: "fadeSlow 1.2s ease both",
         }}>
-          continuer \u2192
+          {"continuer \u2192"}
         </button>
       )}
     </div>
@@ -82,13 +82,13 @@ export default function PremierReve({ onNom }) {
             fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
             lineHeight: 2, marginBottom: "2rem",
           }}>
-            Tu ne vois rien \u00e0 part ce message dans ton esprit.
+            {"Tu ne vois rien \u00e0 part ce message dans ton esprit."}
           </p>
           <div style={{
             fontSize: 13, letterSpacing: 4, color: C.text,
             textTransform: "uppercase", marginBottom: "0.8rem",
           }}>
-            Quel est ton nom ?
+            {"Quel est ton nom ?"}
           </div>
         </div>
       )}
@@ -120,7 +120,7 @@ export default function PremierReve({ onNom }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all .15s",
               }}>
-              \u2713
+              {"\u2713"}
             </button>
           </div>
         </div>

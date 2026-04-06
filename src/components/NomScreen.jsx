@@ -14,7 +14,7 @@ export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
           color: C.muted, fontSize: 11, letterSpacing: 2,
           cursor: "pointer", fontFamily: "inherit",
           textTransform: "uppercase", marginBottom: "2rem", display: "block",
-        }}>\u2190 retour</button>
+        }}>{"\u2190 retour"}</button>
 
         <div style={{ marginBottom: "2rem", paddingBottom: "1.5rem", borderBottom: "1px solid " + C.dim }}>
           <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.3rem" }}>{peuple.nom}</div>
@@ -25,11 +25,11 @@ export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
             </>
           )}
           {!metier && (
-            <div style={{ fontSize: 16, color: C.muted, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif" }}>Sans m\u00e9tier</div>
+            <div style={{ fontSize: 16, color: C.muted, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif" }}>{"Sans m\u00e9tier"}</div>
           )}
         </div>
 
-        <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.4rem" }}>Nom</div>
+        <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.4rem" }}>{"Nom"}</div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", marginBottom: "2rem" }}>
           <input
             type="text" value={nom}
@@ -55,11 +55,11 @@ export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all .15s",
             }}>
-            \u2713
+            {"\u2713"}
           </button>
         </div>
 
-        <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.5rem" }}>Genre (optionnel)</div>
+        <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.5rem" }}>{"Genre (optionnel)"}</div>
         <div style={{ display: "flex", gap: 8, marginBottom: "2.5rem" }}>
           {[["M", "il"], ["F", "elle"], ["N", "iel"]].map(([g, label]) => (
             <button key={g} type="button" onClick={() => setGenre(genre === g ? null : g)}
@@ -89,7 +89,7 @@ export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
             fontFamily: "inherit", display: "block", width: "100%",
             transition: "all .15s",
           }}>
-          Commencer
+          {"Commencer"}
         </button>
       </div>
     </div>
