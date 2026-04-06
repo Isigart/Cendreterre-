@@ -95,35 +95,35 @@ export default function PremierReve({ onNom }) {
       )}
 
       {inputVisible && (
-        <div style={{ width: "100%", maxWidth: 240, animation: "fadeUp .8s ease both" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <input
-              type="text" value={nom}
-              onChange={e => setNom(e.target.value)}
-              onKeyDown={e => { if (e.key === "Enter") confirmer(); }}
-              autoFocus maxLength={20}
-              style={{
-                flex: 1, minWidth: 0, background: "transparent", border: "none",
-                borderBottom: "1px solid " + C.dim,
-                padding: "0.5rem 0", color: C.accent,
-                fontSize: 20, fontStyle: "italic",
-                fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
-                outline: "none", textAlign: "center",
-              }}
-            />
-            <button type="button" onClick={confirmer} disabled={nom.trim().length < 2}
-              style={{
-                flexShrink: 0, background: "transparent",
-                border: "1px solid " + (nom.trim().length >= 2 ? C.accent : C.dim),
-                borderRadius: 3, color: nom.trim().length >= 2 ? C.accent : C.dim,
-                fontSize: 16, width: 36, height: 36,
-                cursor: nom.trim().length >= 2 ? "pointer" : "default",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all .15s",
-              }}>
-              {"\u2713"}
-            </button>
-          </div>
+        <div style={{ width: "100%", maxWidth: 260, padding: "0 1.5rem", animation: "fadeUp .8s ease both", boxSizing: "border-box" }}>
+          <input
+            type="text" value={nom}
+            onChange={e => setNom(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter") confirmer(); }}
+            autoFocus maxLength={20}
+            style={{
+              width: "100%", background: "transparent", border: "none",
+              borderBottom: "1px solid " + (nom.trim() ? C.accent : C.dim),
+              padding: "0.5rem 0", color: C.accent,
+              fontSize: 20, fontStyle: "italic",
+              fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
+              outline: "none", textAlign: "center",
+              marginBottom: "1.5rem", transition: "border-color .2s",
+              boxSizing: "border-box",
+            }}
+          />
+          <button type="button" onClick={confirmer} disabled={nom.trim().length < 2}
+            style={{
+              width: "100%", background: "transparent",
+              border: "1px solid " + (nom.trim().length >= 2 ? C.accent : C.dim),
+              borderRadius: 3, padding: "10px 0",
+              color: nom.trim().length >= 2 ? C.accent : C.dim,
+              fontSize: 11, letterSpacing: 4, textTransform: "uppercase",
+              cursor: nom.trim().length >= 2 ? "pointer" : "default",
+              fontFamily: "inherit", transition: "all .15s",
+            }}>
+            {"Entrer"}
+          </button>
         </div>
       )}
     </div>
