@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { loadHero, saveHero, delHero, loadWorld, saveWorld } from "../lib/storage.js";
-import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy } from "../lib/game.js";
+import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
 import { OUVERTURE_SURVIE } from "../data/narration.js";
@@ -142,7 +142,8 @@ export default function useGame() {
       }
 
       if (!skipHist) {
-        const newWorld = applyLd(worldRef.current, data.ld || {});
+        let newWorld = applyLd(worldRef.current, data.ld || {});
+        newWorld = { ...newWorld, cles: computeAutoCles(newHero, newWorld) };
         worldRef.current = newWorld;
         setWorld(newWorld);
         await saveWorld(newWorld);
