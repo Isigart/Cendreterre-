@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 const HERO_KEY  = "ctl-hero";
 const WORLD_KEY = "ctl-world";
 
-function storageLoad(key) 
+function storageLoad(key) {
   try {
     const v = localStorage.getItem(key);
     return Promise.resolve(v ? JSON.parse(v) : null);
