@@ -8,6 +8,7 @@ import MetierScreen from "./components/MetierScreen.jsx";
 import NomScreen from "./components/NomScreen.jsx";
 import GameScreen from "./components/GameScreen.jsx";
 import CodeScreen from "./components/CodeScreen.jsx";
+import ReglesScreen from "./components/ReglesScreen.jsx";
 
 export default function App() {
   const game = useGame();
@@ -23,6 +24,10 @@ export default function App() {
 
       {game.screen === "code" && (
         <CodeScreen onCode={game.handleCode} />
+      )}
+
+      {game.screen === "regles" && (
+        <ReglesScreen onContinue={() => game.setScreen("premier_reve")} />
       )}
 
       {game.screen === "premier_reve" && (

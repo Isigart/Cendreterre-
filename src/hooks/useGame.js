@@ -132,7 +132,7 @@ export default function useGame() {
     const hasCles = Object.keys(cles).some(k => cles[k]);
     const hasHeroes = livingHeroes.length > 0;
     if (!hasCles && !hasHeroes) {
-      setScreen("premier_reve");
+      setScreen("regles");
     } else {
       setScreen("intro");
     }
