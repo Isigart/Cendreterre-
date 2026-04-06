@@ -49,6 +49,7 @@ export function buildCtx(hero, world, hist) {
   }
   parts.push("magie=" + hero.magie + (hero.metier ? "" : " \u2014 existe mais le h\u00e9ros ne sait pas s'en servir"));
   parts.push("lieu_actuel=" + hero.lieu + " \u2014 le h\u00e9ros y est, ne pas d\u00e9placer sans intention explicite");
+  parts.push("scene=" + (hero.sceneCount || 0));
   if (hero.physique) parts.push("physique=" + hero.physique);
   if (hero.humeur)   parts.push("humeur=" + hero.humeur);
   if (hero.inventaire && hero.inventaire.length)
@@ -60,17 +61,26 @@ export function buildCtx(hero, world, hist) {
   parts.push("MONDE");
   parts.push("profil=" + profil);
   parts.push("directive=[" + (PROFIL_DIRECTIVE[profil] || "") + "]");
+  if (world.meteo) parts.push("meteo=" + world.meteo);
 
+  const consequences = world.consequences || [];
+  if (consequences.length) parts.push("memoire_monde=[" + consequences.join(" | ") + "]");
+
+  // PNJ: prioritize those in same location, then most recent
   const pnj = world.pnj || {};
-  const pnjKeys = Object.keys(pnj).slice(-6);
+  const pnjEntries = Object.entries(pnj);
+  const pnjIci = pnjEntries.filter(([, p]) => p.position && lieuKey(p.position) === key);
+  const pnjAutres = pnjEntries.filter(([, p]) => !p.position || lieuKey(p.position) !== key);
+  const pnjKeys = [...pnjIci.map(([n]) => n), ...pnjAutres.slice(-4).map(([n]) => n)].slice(0, 10);
   if (pnjKeys.length) {
-    const pnjStr = pnjKeys.map(nom => {
-      const p = pnj[nom];
-      let s = nom;
+    const pnjStr = pnjKeys.map(n => {
+      const p = pnj[n];
+      let s = n;
       if (p.genre)       s += " (" + p.genre + ")";
       if (p.statut)      s += " [" + p.statut + "]";
       if (p.description) s += " \u2014 " + p.description;
       if (p.position)    s += " / " + p.position;
+      if (p.humeur)      s += " {" + p.humeur + "}";
       return s;
     }).join(" | ");
     parts.push("pnj_connus=[" + pnjStr + "]");
@@ -151,9 +161,6 @@ export function buildCtx(hero, world, hist) {
       }
     });
   }
-
-  if (hero.dernierChoix && hero.dernierChoix !== "ouverture" && hero.dernierChoix !== "reprise")
-    parts.push("derniere_intention=" + hero.dernierChoix);
 
   return parts.filter(s => s !== null && s !== undefined).join("\n");
 }
