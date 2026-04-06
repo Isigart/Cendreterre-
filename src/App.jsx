@@ -30,7 +30,7 @@ export default function App() {
       )}
 
       {game.screen === "intro" && (
-        <IntroScreen onCommencer={game.handleIntro} heroExistant={game.hero} />
+        <IntroScreen onCommencer={game.handleIntro} heroes={game.heroes} onSwitch={game.switchHero} />
       )}
 
       {game.screen === "creation_peuple" && (

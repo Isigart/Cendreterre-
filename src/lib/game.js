@@ -15,8 +15,7 @@ export function initHero(peuple, metier, nom, genre) {
     magie: peuple.magie,
     lieu,
     lieuxVisites: [lieuKey(lieu)],
-    jour: 1,
-    moment: "matin",
+    lastActiveJour: null,
     arcs: [],
     conditions: metier ? ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re"] : ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re", "d\u00e9sorient\u00e9"],
     traits: {
@@ -56,7 +55,7 @@ export function buildCtx(hero, world, hist, intention) {
   }
   parts.push("magie=" + hero.magie + (hero.metier ? "" : " \u2014 existe mais le h\u00e9ros ne sait pas s'en servir"));
   parts.push("lieu_actuel=" + hero.lieu + " \u2014 le h\u00e9ros y est, ne pas d\u00e9placer sans intention explicite");
-  parts.push("temps=jour " + (hero.jour || 1) + ", " + (hero.moment || "matin"));
+  parts.push("temps=jour " + (world.jour || 1) + ", " + (world.moment || "matin"));
   parts.push("scene=" + (hero.sceneCount || 0));
   const conditions = hero.conditions || [];
   if (conditions.length) {
@@ -287,10 +286,7 @@ export function applyFd(hero, fd) {
       .filter(o => !fd.inventaire_del.includes(o));
   }
 
-  if (fd.moment) next.moment = fd.moment;
-  if (fd.jours_ecoules) {
-    next.jour = (hero.jour || 1) + fd.jours_ecoules;
-  }
+  // moment et jours_ecoules sont appliqu\u00e9s au world, pas au hero
   if (fd.lieu) {
     next.lieu = fd.lieu;
     const visited = new Set(hero.lieuxVisites || []);
@@ -371,6 +367,62 @@ export function applyLd(world, ld) {
   if (ld.evt)
     next.evt = { ...(world.evt || {}), ["evt_" + Date.now()]: ld.evt };
 
+  return next;
+}
+
+export function applyTime(world, fd) {
+  const next = { ...world };
+  if (fd.moment) next.moment = fd.moment;
+  if (fd.jours_ecoules && fd.jours_ecoules > 0) {
+    next.jour = (world.jour || 1) + fd.jours_ecoules;
+  }
+  return next;
+}
+
+// Quand on reprend un h\u00e9ros inactif, appliquer le temps \u00e9coul\u00e9
+export function applyInactiveTime(hero, joursEcoules) {
+  if (!joursEcoules || joursEcoules <= 0) return hero;
+  const next = { ...hero };
+  const conds = [...(hero.conditions || [])];
+
+  // Les conditions n\u00e9gatives s'aggravent si l'\u00e9tat \u00e9tait bancal
+  const aggravations = {
+    "faim l\u00e9g\u00e8re":          { seuil: 2, resultat: "affam\u00e9" },
+    "affam\u00e9":                { seuil: 3, resultat: "affam\u00e9 depuis longtemps" },
+    "soif l\u00e9g\u00e8re":          { seuil: 1, resultat: "assoiff\u00e9" },
+    "assoiff\u00e9":               { seuil: 2, resultat: "d\u00e9shydrat\u00e9" },
+    "fatigu\u00e9":               { seuil: 3, resultat: "fatigu\u00e9 \u2014 toujours" },
+  };
+
+  // Les conditions positives disparaissent avec le temps
+  const positives = ["repos\u00e9", "nourri", "hydrat\u00e9", "en forme"];
+
+  // Aggraver
+  Object.entries(aggravations).forEach(([cond, { seuil, resultat }]) => {
+    const idx = conds.findIndex(c => c.toLowerCase().includes(cond.toLowerCase()));
+    if (idx >= 0 && joursEcoules >= seuil) {
+      conds[idx] = resultat;
+    }
+  });
+
+  // Retirer les positives apr\u00e8s un certain temps
+  if (joursEcoules >= 2) {
+    next.conditions = conds.filter(c => !positives.some(p => c.toLowerCase().includes(p.toLowerCase())));
+  } else {
+    next.conditions = conds;
+  }
+
+  // Blessures gu\u00e9rissent lentement dans un lieu s\u00fbr (5+ jours)
+  if (joursEcoules >= 5) {
+    next.conditions = next.conditions.map(c => {
+      if (c.toLowerCase().includes("bless\u00e9") && !c.toLowerCase().includes("grave")) {
+        return c + " (gu\u00e9rison en cours)";
+      }
+      return c;
+    });
+  }
+
+  next.lastActiveJour = (hero.lastActiveJour || 0);
   return next;
 }
 

@@ -63,22 +63,64 @@ async function serverLoad(code) {
   }
 }
 
+const HEROES_KEY = "ctl-heroes";
+const ACTIVE_KEY = "ctl-active";
+
 // --- API publique ---
 
+// Multi-h\u00e9ros : charge tous les h\u00e9ros
+export async function loadHeroes() {
+  return localLoad(HEROES_KEY) || [];
+}
+
+export async function saveHeroes(heroes) {
+  localSave(HEROES_KEY, heroes);
+  const world = localLoad(WORLD_KEY);
+  serverSave(heroes, world);
+}
+
+// H\u00e9ros actif
+export function getActiveHeroId() {
+  try { return localStorage.getItem(ACTIVE_KEY) || null; } catch (e) { return null; }
+}
+
+export function setActiveHeroId(id) {
+  try { localStorage.setItem(ACTIVE_KEY, id); } catch (e) {}
+}
+
+// Compat : charge le h\u00e9ros actif
 export async function loadHero() {
-  return localLoad(HERO_KEY);
+  const heroes = await loadHeroes();
+  const activeId = getActiveHeroId();
+  if (activeId) {
+    const found = heroes.find(h => h.id === activeId);
+    if (found) return found;
+  }
+  // Fallback : ancien format mono-h\u00e9ros
+  const old = localLoad(HERO_KEY);
+  if (old) {
+    if (!old.id) old.id = "hero_" + Date.now();
+    return old;
+  }
+  return heroes[0] || null;
 }
 
 export async function saveHero(h) {
-  localSave(HERO_KEY, h);
-  // Sync serveur en fond (non-bloquant)
-  const world = localLoad(WORLD_KEY);
-  serverSave(h, world);
+  if (!h.id) h.id = "hero_" + Date.now();
+  const heroes = await loadHeroes();
+  const idx = heroes.findIndex(x => x.id === h.id);
+  if (idx >= 0) heroes[idx] = h;
+  else heroes.push(h);
+  await saveHeroes(heroes);
+  setActiveHeroId(h.id);
 }
 
-export async function delHero() {
-  localDel(HERO_KEY);
-  serverSave(null, localLoad(WORLD_KEY));
+export async function delHero(heroOrId) {
+  const id = typeof heroOrId === "string" ? heroOrId : heroOrId?.id;
+  let heroes = await loadHeroes();
+  if (id) heroes = heroes.filter(h => h.id !== id);
+  await saveHeroes(heroes);
+  localDel(HERO_KEY); // clean ancien format
 }
 
 export async function loadWorld() {
@@ -87,24 +129,28 @@ export async function loadWorld() {
 
 export async function saveWorld(w) {
   localSave(WORLD_KEY, w);
-  const hero = localLoad(HERO_KEY);
-  serverSave(hero, w);
+  const heroes = localLoad(HEROES_KEY);
+  serverSave(heroes, w);
 }
 
-// Charger depuis le serveur (utilis\u00e9 quand le joueur entre son code sur un nouvel appareil)
 export async function loadFromServer(code) {
   const data = await serverLoad(code);
   if (!data) return null;
-  if (data.hero) localSave(HERO_KEY, data.hero);
+  // Support ancien format (hero) et nouveau (heroes)
+  if (data.hero && !Array.isArray(data.hero)) {
+    if (!data.hero.id) data.hero.id = "hero_" + Date.now();
+    localSave(HEROES_KEY, [data.hero]);
+  } else if (Array.isArray(data.hero)) {
+    localSave(HEROES_KEY, data.hero);
+  }
   if (data.world) localSave(WORLD_KEY, data.world);
   return data;
 }
 
-// Forcer une synchro compl\u00e8te vers le serveur
 export async function syncToServer() {
-  const hero = localLoad(HERO_KEY);
+  const heroes = localLoad(HEROES_KEY);
   const world = localLoad(WORLD_KEY);
-  await serverSave(hero, world);
+  await serverSave(heroes, world);
 }
 
 export { HERO_KEY, WORLD_KEY, CODE_KEY };
