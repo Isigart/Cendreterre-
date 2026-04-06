@@ -125,7 +125,7 @@ export default function useGame() {
       let newHero = skipHist ? h : applyFd(h, data.fd || {});
 
       if (data.fd && data.fd.mort) {
-        const snapshot = { prose: result.slice(0, 150), lieu: newHero.lieu };
+        const snapshot = { prose: result.slice(0, 400), intention: intention, lieu: newHero.lieu };
         const newHist = [...histRef.current, snapshot].slice(-6);
         histRef.current = newHist;
         newHero = { ...newHero, hist: newHist, sceneCount: (h.sceneCount || 0) + 1, dernierChoix: label || intention };
@@ -144,9 +144,9 @@ export default function useGame() {
       }
 
       const snapshot = {
-        prose: result.slice(0, 150),
+        prose: result.slice(0, 400),
+        intention: skipHist ? null : intention,
         lieu: newHero.lieu,
-        hint: skipHist ? null : (intentionFinale !== intention ? intentionFinale.split("]")[0].replace("[", "") : null),
       };
       if (data.ld?.consequences?.length) snapshot.consequences = data.ld.consequences;
       if (data.ld?.meteo) snapshot.meteo = data.ld.meteo;

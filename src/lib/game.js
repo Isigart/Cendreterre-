@@ -49,6 +49,10 @@ export function buildCtx(hero, world, hist) {
   }
   parts.push("magie=" + hero.magie + (hero.metier ? "" : " \u2014 existe mais le h\u00e9ros ne sait pas s'en servir"));
   parts.push("lieu_actuel=" + hero.lieu + " \u2014 le h\u00e9ros y est, ne pas d\u00e9placer sans intention explicite");
+  if (hero.physique) parts.push("physique=" + hero.physique);
+  if (hero.humeur)   parts.push("humeur=" + hero.humeur);
+  if (hero.inventaire && hero.inventaire.length)
+    parts.push("inventaire=[" + hero.inventaire.join(", ") + "]");
   if (hero.traits.acquis && hero.traits.acquis.length)
     parts.push("acquis=[" + hero.traits.acquis.join(", ") + "]");
 
@@ -122,6 +126,7 @@ export function buildCtx(hero, world, hist) {
       if (typeof s === "string") { parts.push("\u2014 " + s); return; }
       if (age === 0) {
         const lines = ["SC\u00c8NE PR\u00c9C\u00c9DENTE"];
+        if (s.intention)    lines.push("intention_joueur=" + s.intention);
         if (s.prose)        lines.push("prose=" + s.prose);
         if (s.lieu)         lines.push("lieu=" + s.lieu);
         if (s.meteo)        lines.push("meteo=" + s.meteo);
@@ -133,12 +138,16 @@ export function buildCtx(hero, world, hist) {
         parts.push(lines.join("\n"));
       } else if (age <= 2) {
         const lines = [];
+        if (s.intention) lines.push("[" + s.intention + "]");
         if (s.prose) lines.push(s.prose);
         if (s.lieu)  lines.push("@" + s.lieu);
-        if (s.consequences?.length) lines.push("[" + s.consequences.join(" | ") + "]");
+        if (s.consequences?.length) lines.push("=> " + s.consequences.join(" | "));
         parts.push("\u2014 " + lines.join(" \u00b7 "));
       } else {
-        parts.push("\u2014 " + (s.prose || s));
+        const lines = [];
+        if (s.intention) lines.push("[" + s.intention + "]");
+        lines.push(s.prose || s);
+        parts.push("\u2014 " + lines.join(" \u00b7 "));
       }
     });
   }
