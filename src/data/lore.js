@@ -153,6 +153,22 @@ export const LORE_REGIONS = {
     region: "Les Hauts-P\u00eacheurs",
     lore: "Villages le long du Fleuve Furieux. P\u00eacheurs qui coexistent avec le fleuve. Le deuil est normal ici \u2014 le fleuve prend r\u00e9guli\u00e8rement. Par beau temps on voit l'autre rive. Des lumi\u00e8res la nuit. Personne n'y va.",
   },
+  terre_balayee: {
+    region: "Terre-Balay\u00e9e",
+    lore: "Plaine agricole immense, vent permanent. \u00c9levage cendreux, contr\u00f4le imp\u00e9rial sur les r\u00e9coltes. Les fermes sont isol\u00e9es. Communaut\u00e9s soud\u00e9es par le travail et la m\u00e9fiance. Le Fleuve Furieux est proche au nord \u2014 on entend parfois ses rapides la nuit.",
+  },
+  les_coteaux: {
+    region: "Les Coteaux",
+    lore: "Collines viticoles. L'empire taxe le vin lourdement \u2014 la production continue quand m\u00eame. Contrebande de tonneaux par les chemins de traverse. Les Cendreux d'ici sont moins am\u00e8res qu'ailleurs \u2014 le vin aide. Les caves creus\u00e9es dans le calcaire cachent plus que des bouteilles.",
+  },
+  le_perigord: {
+    region: "Le P\u00e9rigord",
+    lore: "Falaises calcaires, rivi\u00e8res encaiss\u00e9es, habitations troglodytes. Ruines d'une \u00e9poque inconnue \u2014 bien avant les Cendreux. Personne ne sait qui a construit \u00e7a. Les Cendreux radicaux se cachent dans les bois et les falaises. L'empire \u00e9vite d'y envoyer des patrouilles \u2014 elles ne reviennent pas toujours.",
+  },
+  le_puits: {
+    region: "Montagnes Sonneuses \u2014 Le Puits",
+    lore: "Ville de montagne construite autour d'un puits naturel immense. Fa\u00e7ade commerciale pour l'ext\u00e9rieur. La vraie ville Sonneuse est en dessous \u2014 des kilom\u00e8tres de galeries \u00e9clair\u00e9es par les veines de lave. Le bruit des chants monte parfois du puits. Les \u00e9trangers ne descendent pas.",
+  },
   marais_tortues: {
     region: "Le Marais des Tortues",
     lore: "Delta du Fleuve Furieux. Mar\u00e9cages imp\u00e9n\u00e9trables. Territoire Foulard d'origine. Les tortues g\u00e9antes y vivent \u2014 m\u00e9moire vivante sur des g\u00e9n\u00e9rations. L'empire ne cartographie pas ce qu'il ne peut pas contr\u00f4ler.",
@@ -192,10 +208,11 @@ export function buildLoreCtx(heroLieu, heroPeuple, profil) {
 
   // Peuple local (si diff\u00e9rent du h\u00e9ros)
   const localPeuples = {
-    hautcendre: "cendreux", pierrelong: "sonneur", hauts_plateaux: "agritan",
-    val_des_brumes: "sylvain", la_lisiere: "sylvain", la_croisee: "foulard",
-    marceins: "ratainien", les_cols: "ratainien", marais_tortues: "foulard",
-    ramasse: "cendreux", hamecon: "cendreux",
+    hautcendre: "cendreux", pierrelong: "sonneur", le_puits: "sonneur",
+    hauts_plateaux: "agritan", val_des_brumes: "sylvain", la_lisiere: "sylvain",
+    la_croisee: "foulard", marceins: "ratainien", les_cols: "ratainien",
+    marais_tortues: "foulard", ramasse: "cendreux", hamecon: "cendreux",
+    terre_balayee: "cendreux", les_coteaux: "cendreux", le_perigord: "cendreux",
   };
   const localPeuple = localPeuples[key];
   if (localPeuple && localPeuple !== heroPeuple) {
