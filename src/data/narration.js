@@ -126,6 +126,7 @@ ld : ce qui change dans le monde.
     }
   }
   cles:{cle_id:true} \u2014 voir TABLE DES CL\u00c9S ci-dessous
+  journal:{categorie:{id:"fragment"}} \u2014 voir JOURNAL ci-dessous
   en_suspens:["cons\u00e9quence r\u00e9elle non r\u00e9solue"]
   consequences:["ce que le monde retient de cette sc\u00e8ne \u2014 fait court, concret"]
   meteo:"nuit tomb\u00e9e | pluie fine | grand froid"
@@ -135,6 +136,22 @@ N'injecte fd/ld que si quelque chose a vraiment chang\u00e9. Objets = seulement 
 
 LONGUEUR
 2 \u00e0 4 paragraphes. Pas plus sauf voyage ou combat. Chaque phrase doit apporter un fait nouveau. Si elle n'apporte rien \u2014 la supprimer.
+
+JOURNAL DE CONNAISSANCE
+Le joueur accumule des fragments de savoir \u00e0 travers ses h\u00e9ros. Quand le h\u00e9ros d\u00e9couvre quelque chose de nouveau, ajoute un fragment dans ld.journal.
+Cat\u00e9gories : lieux, peuples, pnj, creatures, magie, faune_flore, monde.
+Format : journal:{categorie:{id:"fragment court \u2014 ce que le h\u00e9ros observe, pas la fiche compl\u00e8te"}}
+Exemples :
+  journal:{lieux:{hautcendre:"Ville de pierre noire. Des lampes sans flamme dans les murs."}}
+  journal:{peuples:{sonneur:"Trapus, voix grave. Ils chantent et la terre semble r\u00e9pondre."}}
+  journal:{pnj:{maren:"Forgeronne. Br\u00fblure sur l'avant-bras gauche. Directe, impatiente."}}
+  journal:{creatures:{varek:"Silhouette sombre sur le chemin. Ne s'arr\u00eate pas. Mieux vaut ne pas s'arr\u00eater non plus."}}
+  journal:{magie:{circuits:"Des lignes grav\u00e9es dans la pierre qui stockent de l'\u00e9nergie. Pas de la sorcellerie \u2014 de l'ing\u00e9nierie."}}
+R\u00e8gles :
+- Un fragment = ce que le h\u00e9ros a VU ou COMPRIS dans cette sc\u00e8ne. Pas la v\u00e9rit\u00e9 compl\u00e8te.
+- Plusieurs fragments s'accumulent au fil des sc\u00e8nes pour construire la connaissance.
+- Ne pas tout r\u00e9v\u00e9ler d'un coup. Un fragment par d\u00e9couverte.
+- Max 2-3 fragments journal par sc\u00e8ne.
 
 TABLE DES CL\u00c9S
 \u00c9mets une cl\u00e9 dans ld.cles UNIQUEMENT quand le crit\u00e8re est rempli dans la sc\u00e8ne. Une cl\u00e9 d\u00e9j\u00e0 pr\u00e9sente dans le CTX ne doit pas \u00eatre r\u00e9\u00e9mise.

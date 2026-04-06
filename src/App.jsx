@@ -9,6 +9,7 @@ import NomScreen from "./components/NomScreen.jsx";
 import GameScreen from "./components/GameScreen.jsx";
 import CodeScreen from "./components/CodeScreen.jsx";
 import ReglesScreen from "./components/ReglesScreen.jsx";
+import JournalScreen from "./components/JournalScreen.jsx";
 
 export default function App() {
   const game = useGame();
@@ -64,6 +65,10 @@ export default function App() {
         />
       )}
 
+      {game.screen === "journal" && (
+        <JournalScreen journal={game.worldRef.current.journal} onBack={() => game.setScreen("jeu")} />
+      )}
+
       {game.screen === "jeu" && (
         <GameScreen
           hero={game.hero}
@@ -80,6 +85,7 @@ export default function App() {
           onEndReve={game.handleEndReve}
           onNewDream={() => { game.setDeadHero(null); game.setProse(""); game.setScreen("intro"); }}
           onReset={game.reset}
+          onJournal={() => game.setScreen("journal")}
         />
       )}
     </div>
