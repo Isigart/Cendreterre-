@@ -86,7 +86,11 @@ ld : ce qui change dans le monde.
   consequences:["ce que le monde retient de cette sc\u00e8ne \u2014 fait court, concret"]
   meteo:"nuit tomb\u00e9e | pluie fine | grand froid"
 
-N'injecte fd/ld que si quelque chose a vraiment chang\u00e9. Objets = seulement ceux que le h\u00e9ros peut utiliser.`;
+scene_state est CRUCIAL : c'est la disposition spatiale de la sc\u00e8ne. Mets \u00e0 jour scene_state \u00e0 chaque sc\u00e8ne o\u00f9 la disposition change : positions des PNJ, \u00e9tat des portes/objets, orientation du h\u00e9ros. Format court : "garde : entr\u00e9e nord, debout", "porte : ferm\u00e9e", "h\u00e9ros : face au comptoir".
+N'injecte fd/ld que si quelque chose a vraiment chang\u00e9. Objets = seulement ceux que le h\u00e9ros peut utiliser.
+
+LONGUEUR
+2 \u00e0 4 paragraphes. Pas plus sauf voyage ou combat. Chaque phrase doit apporter un fait nouveau. Si elle n'apporte rien \u2014 la supprimer.`;
 
 export const PROFIL_DIRECTIVE = {
   debutant: "Le joueur ne sait rien. Le monde est opaque, indiff\u00e9rent. Il survit ou non. Pas de nom de lieu, de faction, de peuple \u2014 seulement ce qu'il voit et touche. Le GM ne l'assiste pas. Il apprend en agissant.",
