@@ -12,6 +12,7 @@ export function initHero(peuple, metier, nom, genre) {
     metier: metier ? { id: metier.id, nom: metier.nom, desc: metier.desc } : null,
     magie: peuple.magie,
     lieu,
+    lieuxVisites: [lieuKey(lieu)],
     traits: {
       public:  [],
       stats:   metier ? [metier.desc] : [],
@@ -212,10 +213,25 @@ export function applyFd(hero, fd) {
       .filter(o => !fd.inventaire_del.includes(o));
   }
 
-  if (fd.lieu) next.lieu = fd.lieu;
+  if (fd.lieu) {
+    next.lieu = fd.lieu;
+    const visited = new Set(hero.lieuxVisites || []);
+    visited.add(lieuKey(fd.lieu));
+    next.lieuxVisites = [...visited];
+  }
   if (fd.mort) next.vivant = false;
 
   return next;
+}
+
+export function computeAutoCles(hero, world) {
+  const cles = { ...(world.cles || {}) };
+  const visited = hero.lieuxVisites || [];
+
+  if (visited.length >= 2 && !cles.voyage_region_2) cles.voyage_region_2 = true;
+  if (visited.length >= 3 && !cles.voyage_region_3) cles.voyage_region_3 = true;
+
+  return cles;
 }
 
 export function applyLd(world, ld) {

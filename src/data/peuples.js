@@ -123,7 +123,7 @@ export const DEBLOCAGES = {
       { cles: [],                              ids: ["paysan"] },
       { cles: ["initiation_danger"],           ids: ["journalier", "ouvrier"] },
       { cles: ["initiation_choix"],            ids: ["braconnier"] },
-      { cles: ["voyage_region_2"],             ids: ["porteur", "marchand"] },
+      { cles: ["voyage_region_2"],              ids: ["porteur", "marchand"] },
       { cles: ["occupation_vecue"],            ids: ["contrebandier"] },
       { cles: ["resistance_contactee"],        ids: ["resistant"] },
       { cles: ["collaboration_vue"],           ids: ["collaborateur"] },
@@ -146,9 +146,9 @@ export const DEBLOCAGES = {
       { cles: ["faction_agritans_lien"],    ids: ["dresseur_agr", "tatoueur_agr", "chef_agr"] },
     ],
     foulard: [
-      { cles: ["faction_foulards_service"],                         ids: ["coureur_route", "sedentaire"] },
-      { cles: ["faction_foulards_reseau"],                          ids: ["runiste", "marchand_mots", "cartographe", "marchand_croisee"] },
-      { cles: ["faction_foulards_reseau", "voyage_region_3"],       ids: ["lame_sil", "gardien_alpha"] },
+      { cles: ["faction_foulards_service"],                           ids: ["coureur_route", "sedentaire"] },
+      { cles: ["faction_foulards_reseau"],                            ids: ["runiste", "marchand_mots", "cartographe", "marchand_croisee"] },
+      { cles: ["faction_foulards_profond"],                           ids: ["lame_sil", "gardien_alpha"] },
     ],
     ratainien: [
       { cles: ["occupation_comprise"],      ids: ["legionnaire", "decurion", "collecteur_rat", "scribe_imp", "marchand_rat", "colon"] },

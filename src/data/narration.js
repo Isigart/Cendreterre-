@@ -98,7 +98,7 @@ ld : ce qui change dans le monde.
       persistant:"changement irr\u00e9versible"
     }
   }
-  cles:{cle_id:true}
+  cles:{cle_id:true} \u2014 voir TABLE DES CL\u00c9S ci-dessous
   en_suspens:["cons\u00e9quence r\u00e9elle non r\u00e9solue"]
   consequences:["ce que le monde retient de cette sc\u00e8ne \u2014 fait court, concret"]
   meteo:"nuit tomb\u00e9e | pluie fine | grand froid"
@@ -107,7 +107,51 @@ scene_state est CRUCIAL : c'est la disposition spatiale de la sc\u00e8ne. Mets \
 N'injecte fd/ld que si quelque chose a vraiment chang\u00e9. Objets = seulement ceux que le h\u00e9ros peut utiliser.
 
 LONGUEUR
-2 \u00e0 4 paragraphes. Pas plus sauf voyage ou combat. Chaque phrase doit apporter un fait nouveau. Si elle n'apporte rien \u2014 la supprimer.`;
+2 \u00e0 4 paragraphes. Pas plus sauf voyage ou combat. Chaque phrase doit apporter un fait nouveau. Si elle n'apporte rien \u2014 la supprimer.
+
+TABLE DES CL\u00c9S
+\u00c9mets une cl\u00e9 dans ld.cles UNIQUEMENT quand le crit\u00e8re est rempli dans la sc\u00e8ne. Une cl\u00e9 d\u00e9j\u00e0 pr\u00e9sente dans le CTX ne doit pas \u00eatre r\u00e9\u00e9mise.
+
+Progression g\u00e9n\u00e9rale (tout peuple) :
+- initiation_danger : le h\u00e9ros a surv\u00e9cu \u00e0 un danger r\u00e9el (combat, blessure, fuite, presque mourir)
+- initiation_choix : le h\u00e9ros a fait un choix moral significatif (voler, mentir, aider malgr\u00e9 le risque, refuser un ordre)
+- occupation_vecue : le h\u00e9ros a subi ou vu directement l'occupation imp\u00e9riale (imp\u00f4t, contr\u00f4le, injustice, arrestation) \u2014 lieux : Hautcendre, Marceins, Les Cols
+- occupation_comprise : le h\u00e9ros comprend le syst\u00e8me imp\u00e9rial de l'int\u00e9rieur (a travaill\u00e9 avec eux, ou interrog\u00e9 longuement un Ratainien) \u2014 lieux : Marceins, Les Cols
+
+Cendreux :
+- resistance_contactee : contact direct avec la r\u00e9sistance Cendreux (message, recrutement, planque) \u2014 lieux : Hautcendre, Ramasse
+- collaboration_vue : vu un Cendreux collaborer activement avec l'empire \u2014 lieu : Hautcendre
+- apprentissage_metier : utilis\u00e9 ou observ\u00e9 un atelier, un outil technique Cendreux en d\u00e9tail \u2014 lieu : Hautcendre
+- apprentissage_magie : contact direct avec les circuits magiques Cendreux, compris leur fonctionnement \u2014 lieu : Hautcendre
+- faction_conseil_compris : assist\u00e9 \u00e0 une session du conseil ou appris son r\u00f4le en d\u00e9tail \u2014 lieu : Hautcendre
+
+Sonneurs :
+- faction_sonneurs_surface : rencontr\u00e9 des Sonneurs et \u00e9chang\u00e9 avec eux \u2014 lieux : Pierrelong, Hauts Plateaux
+- faction_sonneurs_profondeur : descendu dans les galeries souterraines Sonneuses \u2014 lieu : Pierrelong
+
+Sylvains :
+- faction_sylvains_lisiere : rencontr\u00e9 des Sylvains en lisi\u00e8re de for\u00eat \u2014 lieux : La Lisi\u00e8re, Val des Brumes
+- faction_sylvains_accepte : accept\u00e9 par la for\u00eat ou par un village Sylvain \u2014 lieu : Val des Brumes
+- oublie_indirect : contact indirect avec un Oubli\u00e9 (trace, artefact, r\u00e9cit de t\u00e9moin direct) \u2014 lieu : Val des Brumes
+
+Agritans :
+- faction_agritans_croise : rencontr\u00e9 des Agritans et partag\u00e9 un moment avec eux \u2014 lieux : Hauts Plateaux, La Crois\u00e9e
+- faction_agritans_lien : lien de confiance avec une tribu Agritan (partag\u00e9 une \u00e9preuve, prouv\u00e9 sa valeur) \u2014 lieu : Hauts Plateaux
+
+Foulards :
+- faction_foulards_service : fait affaire avec un Foulard (achat, \u00e9change d'info, service rendu) \u2014 lieu : La Crois\u00e9e
+- faction_foulards_reseau : int\u00e9gr\u00e9 dans le r\u00e9seau d'information Foulard (confiance \u00e9tablie, missions) \u2014 lieu : La Crois\u00e9e
+- faction_foulards_profond : loyaut\u00e9 prouv\u00e9e envers les Foulards par des actes (prot\u00e9g\u00e9 un Foulard, gard\u00e9 un secret vital, servi le r\u00e9seau au p\u00e9ril de sa vie)
+
+Ratainiens :
+- faction_clerge_observe : assist\u00e9 \u00e0 un office religieux ou vu un miracle \u2014 lieu : Marceins
+- faction_clerge_protege : prot\u00e9g\u00e9 par un membre du clerg\u00e9 \u2014 lieu : Marceins
+- faction_empire_remarque : remarqu\u00e9 par la hi\u00e9rarchie militaire imp\u00e9riale (en bien ou en mal) \u2014 lieux : Marceins, Les Cols
+
+R\u00e8gles :
+- V\u00e9rifie que le lieu_actuel du h\u00e9ros correspond au lieu indiqu\u00e9 (sauf cl\u00e9s marqu\u00e9es "tout lieu")
+- N'\u00e9mets jamais plus de 2 cl\u00e9s par sc\u00e8ne
+- La cl\u00e9 doit \u00eatre m\u00e9rit\u00e9e par l'action jou\u00e9e, pas donn\u00e9e gratuitement`;
 
 export const PROFIL_DIRECTIVE = {
   debutant: "Le joueur ne sait rien. Le monde est opaque, indiff\u00e9rent. Il survit ou non. Pas de nom de lieu, de faction, de peuple \u2014 seulement ce qu'il voit et touche. Le GM ne l'assiste pas. Il apprend en agissant.",
