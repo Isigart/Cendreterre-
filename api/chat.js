@@ -24,17 +24,15 @@ export default async function handler(req) {
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
       max_tokens: max_tokens || 1500,
-      stream: true,
+      stream: false,
       system,
       messages,
     }),
   });
 
-  return new Response(response.body, {
+  const data = await response.json();
+  return new Response(JSON.stringify(data), {
     status: response.status,
-    headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-    },
+    headers: { "Content-Type": "application/json" },
   });
 }
