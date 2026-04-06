@@ -672,8 +672,7 @@ async function callLLM(ctx, intention, onChunk) {
             const out  = stop >= 0 ? after.slice(0, stop) : after;
             if (out) onChunk(out);
           } else if (proseStarted) {
-            if (full.split("///PROSE")[1]?.includes("///")) continue;
-            onChunk(text);
+            const _after = (full.split("///PROSE")[1] || ""); if (!_after.includes("///")) onChunk(text);
           }
         }
       } catch(pe) {
