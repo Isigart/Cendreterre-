@@ -615,72 +615,25 @@ function buildCtx(hero, world, hist) {
 
   return parts.filter(s => s !== null && s !== undefined).join("\n");
 }
-
 async function callLLM(ctx, intention, onChunk) {
-  let r;
-  try {
-    r = await Promise.race([
-      fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system: SYS,
-          messages: [{ role: "user", content: ctx + "\n\nINTENTION: " + intention }],
-          max_tokens: 1500,
-          stream: true,
-        }),
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 45000)),
-    ]);
-  } catch(e) { throw new Error("réseau : " + e.message); }
-
-  if (!r.ok) {
-    const txt = await r.text().catch(() => "");
-    if (r.status === 429 || txt.includes("rate_limit") || txt.includes("overloaded"))
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system: SYS,
+      messages: [{ role: "user", content: ctx + "\n\nINTENTION: " + intention }],
+      max_tokens: 1500,
+      stream: false,
+    }),
+  });
+  if (!response.ok) {
+    const txt = await response.text().catch(() => "");
+    if (response.status === 429 || txt.includes("rate_limit") || txt.includes("overloaded"))
       throw new Error("RATE_LIMIT");
-    throw new Error("HTTP " + r.status);
+    throw new Error("HTTP " + response.status);
   }
-
-  const reader  = r.body.getReader();
-  const decoder = new TextDecoder();
-  let full = "";
-  let proseStarted = false;
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value, { stream: true });
-    for (const line of chunk.split("\n")) {
-      if (!line.startsWith("data: ")) continue;
-      const raw = line.slice(6).trim();
-      if (raw === "[DONE]") continue;
-      try {
-        const evt = JSON.parse(raw);
-        if (evt.type === "error") {
-          const t = evt.error?.type || "";
-          if (t === "rate_limit_error" || t === "overloaded_error") throw new Error("RATE_LIMIT");
-          throw new Error(evt.error?.message || "stream error");
-        }
-        if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
-          const text = evt.delta.text || "";
-          full += text;
-          if (!proseStarted && full.includes("///PROSE")) {
-            proseStarted = true;
-            let after = full.split("///PROSE")[1] || "";
-            if (after.startsWith("\n")) after = after.slice(1);
-            const stop = after.indexOf("///");
-            const out  = stop >= 0 ? after.slice(0, stop) : after;
-            if (out) onChunk(out);
-          } else if (proseStarted) {
-            const _after = (full.split("///PROSE")[1] || ""); if (!_after.includes("///")) onChunk(text);
-          }
-        }
-      } catch(pe) {
-        if (pe.message === "RATE_LIMIT") throw pe;
-      }
-    }
-  }
-
+  const json = await response.json();
+  const full = (json.content || []).map(b => b.text || "").join("");
   let prose = "";
   if (full.includes("///PROSE")) {
     let after = full.split("///PROSE")[1] || "";
@@ -689,27 +642,18 @@ async function callLLM(ctx, intention, onChunk) {
     prose = stop >= 0 ? after.slice(0, stop).trim() : after.trim();
   }
   if (!prose) prose = full.replace(/\/\/\/PROSE/g, "").replace(/\/\/\/[\s\S]*/g, "").trim();
-
+  onChunk(prose);
   let data = { fd: {}, ld: {} };
   try {
-    const dataMatch = full.match(/\/\/\/DATA\s*([\s\S]+?)\/\/\//) ||
-                      full.match(/\/\/\/DATA\s*([\s\S]+?)$/);
+    const dataMatch = full.match(/\/\/\/DATA\s*([\s\S]+?)\/\/\//) || full.match(/\/\/\/DATA\s*([\s\S]+?)$/);
     if (dataMatch) {
-      const tick = String.fromCharCode(96);
-      const raw = dataMatch[1].trim()
-        .split(tick+tick+tick+"json").join("")
-        .split(tick+tick+tick).join("")
-        .trim();
-      const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === "object") {
-        data.fd = parsed.fd || {};
-        data.ld = parsed.ld || {};
-      }
+      const parsed = JSON.parse(dataMatch[1].trim());
+      if (parsed && typeof parsed === "object") { data.fd = parsed.fd || {}; data.ld = parsed.ld || {}; }
     }
-  } catch(e) { /* parsing raté — on garde data vide */ }
-
+  } catch(e) {}
   return { prose, data };
 }
+
 
 function buildHint(txt) {
   const t = txt.toLowerCase();
