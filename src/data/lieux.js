@@ -39,6 +39,21 @@ export const LIEUX_BASE = {
     ambiance: "silence lourd que le vent ne remplit pas, horizon d\u00e9gag\u00e9, sentiment d'\u00eatre observ\u00e9 sans voir qui regarde, nuits tr\u00e8s froides",
     danger:   "raids Agritans sur les voyageurs isol\u00e9s, froid mortel hors des abris, falaises sans chemin balis\u00e9",
   },
+  hamecon: {
+    physique: "port de p\u00eache sur la c\u00f4te nord, bateaux \u00e0 fond plat, quais en bois, odeur de sel et de poisson s\u00e9ch\u00e9",
+    ambiance: "vie rude et simple, les gens parlent peu aux \u00e9trangers, solidarit\u00e9 entre p\u00eacheurs",
+    danger:   "la mer en hiver, les courants, pas de m\u00e9decin",
+  },
+  ramasse: {
+    physique: "bocage dense, routes \u00e9troites qui se croisent, haies hautes, fermes dispers\u00e9es, peu de villes",
+    ambiance: "m\u00e9fiance de surface, hospitalit\u00e9 r\u00e9elle une fois la confiance accord\u00e9e, r\u00e9seau de solidarit\u00e9 invisible",
+    danger:   "patrouilles imp\u00e9riales sur les grands axes, d\u00e9lateurs dans les auberges",
+  },
+  marais_tortues: {
+    physique: "mar\u00e9cages \u00e9tendus, eau stagnante, \u00eelots de terre ferme, v\u00e9g\u00e9tation dense et basse, tortues g\u00e9antes visibles au loin",
+    ambiance: "silence humide, le terrain dicte la route, seuls les Foulards connaissent les passages s\u00fbrs",
+    danger:   "s'enliser, se perdre, les tortues ne sont pas toutes paisibles",
+  },
 };
 
 export const PHYSIQUE_PEUPLES = {
@@ -53,67 +68,67 @@ export const PHYSIQUE_PEUPLES = {
 
 export const DISTANCES = {
   hautcendre: {
-    hamecon:         { j: 2,  note: "nord, plaine \u2014 route rapide" },
-    pierrelong:      { j: 8,  note: "nord-est, bocage puis montagne escarp\u00e9e" },
-    hauts_plateaux:  { j: 6,  note: "centre, bocage puis volcans et pentes" },
-    la_lisiere:      { j: 5,  note: "est, bocage \u2014 route marchande" },
-    val_des_brumes:  { j: 8,  note: "est, bocage puis for\u00eat dense imp\u00e9n\u00e9trable" },
-    ramasse:         { j: 9,  note: "ouest, bocage tr\u00e8s dense \u2014 routes difficiles" },
-    marais_tortues:  { j: 9,  note: "sud-ouest, plaine puis marais" },
-    marceins:        { j: 8,  note: "sud, route imp\u00e9riale pav\u00e9e \u2014 surveill\u00e9e" },
-    les_cols:        { j: 12, note: "extr\u00eame sud, route imp\u00e9riale puis montagne" },
+    hamecon:         { j: 2,  note: "nord, plaine \u2014 route rapide",                          terrain: "plaine cultiv\u00e9e, fermes, route pav\u00e9e en bon \u00e9tat" },
+    pierrelong:      { j: 8,  note: "nord-est, bocage puis montagne escarp\u00e9e",               terrain: "bocage 3j \u2192 hauts plateaux volcaniques 3j \u2192 mont\u00e9e vers les falaises 2j" },
+    hauts_plateaux:  { j: 6,  note: "centre, bocage puis volcans et pentes",                  terrain: "bocage 2j \u2192 pentes volcaniques 2j \u2192 plateau rocheux 2j, froid croissant" },
+    la_lisiere:      { j: 5,  note: "est, bocage \u2014 route marchande",                        terrain: "bocage cultiv\u00e9 3j \u2192 prairies 1j \u2192 champs en lisi\u00e8re de for\u00eat 1j" },
+    val_des_brumes:  { j: 8,  note: "est, bocage puis for\u00eat dense",                         terrain: "bocage 3j \u2192 prairies 2j \u2192 lisi\u00e8re 1j \u2192 for\u00eat profonde 2j (la for\u00eat d\u00e9cide si tu passes)" },
+    ramasse:         { j: 9,  note: "ouest, bocage tr\u00e8s dense \u2014 routes difficiles",          terrain: "bocage dense 5j \u2192 chemins \u00e9troits entre haies 4j, peu de rep\u00e8res" },
+    marais_tortues:  { j: 9,  note: "sud-ouest, plaine puis marais",                          terrain: "plaine 4j \u2192 terrain humide 3j \u2192 mar\u00e9cages 2j (guides Foulards recommand\u00e9s)" },
+    marceins:        { j: 8,  note: "sud, route imp\u00e9riale pav\u00e9e \u2014 surveill\u00e9e",             terrain: "route imp\u00e9riale pav\u00e9e 8j, patrouilles r\u00e9guli\u00e8res, auberges imp\u00e9riales tous les 2j" },
+    les_cols:        { j: 12, note: "extr\u00eame sud, route imp\u00e9riale puis montagne",           terrain: "route imp\u00e9riale 8j \u2192 Marceins \u2192 mont\u00e9e vers la forteresse 4j, froid en altitude" },
   },
   pierrelong: {
-    hautcendre:      { j: 8,  note: "sud-ouest, descente de montagne puis bocage" },
-    hauts_plateaux:  { j: 5,  note: "sud, descente des montagnes Sonneuses" },
-    val_des_brumes:  { j: 6,  note: "sud, versant est puis for\u00eat profonde" },
-    la_lisiere:      { j: 7,  note: "sud-ouest, travers\u00e9e des plateaux" },
-    hamecon:         { j: 5,  note: "ouest, c\u00f4te puis plaine" },
+    hautcendre:      { j: 8,  note: "sud-ouest, descente de montagne puis bocage",            terrain: "descente falaises 2j \u2192 plateaux 3j \u2192 bocage 3j" },
+    hauts_plateaux:  { j: 5,  note: "sud, descente des montagnes Sonneuses",                  terrain: "descente rocheuse 2j \u2192 plateau venteux 3j" },
+    val_des_brumes:  { j: 6,  note: "sud, versant est puis for\u00eat profonde",                  terrain: "descente versant est 3j \u2192 lisi\u00e8re 1j \u2192 for\u00eat 2j" },
+    la_lisiere:      { j: 7,  note: "sud-ouest, travers\u00e9e des plateaux",                     terrain: "descente 2j \u2192 plateaux 3j \u2192 prairies 2j" },
+    hamecon:         { j: 5,  note: "ouest, c\u00f4te puis plaine",                               terrain: "c\u00f4te rocheuse 3j \u2192 plaine c\u00f4ti\u00e8re 2j" },
   },
   hauts_plateaux: {
-    hautcendre:      { j: 6,  note: "nord, descente des volcans puis bocage" },
-    pierrelong:      { j: 5,  note: "nord-est, mont\u00e9e en altitude progressive" },
-    la_lisiere:      { j: 4,  note: "est, plateau puis bocage" },
-    marceins:        { j: 6,  note: "sud, route imp\u00e9riale \u2014 terrain d\u00e9gag\u00e9" },
-    ramasse:         { j: 6,  note: "ouest, bocage dense" },
+    hautcendre:      { j: 6,  note: "nord, descente des volcans puis bocage",                 terrain: "plateau 2j \u2192 pentes volcaniques 2j \u2192 bocage 2j" },
+    pierrelong:      { j: 5,  note: "nord-est, mont\u00e9e en altitude progressive",              terrain: "plateau 3j \u2192 mont\u00e9e rocheuse 2j" },
+    la_lisiere:      { j: 4,  note: "est, plateau puis bocage",                               terrain: "plateau venteux 2j \u2192 descente douce 1j \u2192 prairies 1j" },
+    marceins:        { j: 6,  note: "sud, route imp\u00e9riale \u2014 terrain d\u00e9gag\u00e9",                terrain: "descente plateau 2j \u2192 plaine 2j \u2192 route imp\u00e9riale 2j" },
+    ramasse:         { j: 6,  note: "ouest, bocage dense",                                    terrain: "descente ouest 2j \u2192 bocage dense 4j" },
   },
   la_lisiere: {
-    hautcendre:      { j: 5,  note: "ouest, bocage \u2014 route marchande" },
-    val_des_brumes:  { j: 2,  note: "est \u2014 la for\u00eat commence ici" },
-    hauts_plateaux:  { j: 4,  note: "ouest, bocage puis mont\u00e9e douce" },
-    pierrelong:      { j: 7,  note: "nord-est, terrain vari\u00e9" },
-    marceins:        { j: 5,  note: "sud, plaine puis route imp\u00e9riale" },
+    hautcendre:      { j: 5,  note: "ouest, bocage \u2014 route marchande",                      terrain: "prairies 1j \u2192 bocage cultiv\u00e9 3j \u2192 approche Hautcendre 1j" },
+    val_des_brumes:  { j: 2,  note: "est \u2014 la for\u00eat commence ici",                        terrain: "champs 0.5j \u2192 lisi\u00e8re puis for\u00eat 1.5j" },
+    hauts_plateaux:  { j: 4,  note: "ouest, bocage puis mont\u00e9e douce",                      terrain: "prairies 1j \u2192 bocage 1j \u2192 mont\u00e9e progressive 2j" },
+    pierrelong:      { j: 7,  note: "nord-est, terrain vari\u00e9",                               terrain: "prairies 2j \u2192 plateaux 3j \u2192 mont\u00e9e vers falaises 2j" },
+    marceins:        { j: 5,  note: "sud, plaine puis route imp\u00e9riale",                      terrain: "plaine 3j \u2192 route imp\u00e9riale 2j" },
   },
   val_des_brumes: {
-    la_lisiere:      { j: 2,  note: "ouest \u2014 sortie de la for\u00eat" },
-    hautcendre:      { j: 8,  note: "ouest, for\u00eat puis bocage" },
-    pierrelong:      { j: 6,  note: "nord, for\u00eat puis montagne" },
+    la_lisiere:      { j: 2,  note: "ouest \u2014 sortie de la for\u00eat",                         terrain: "for\u00eat 1.5j \u2192 lisi\u00e8re 0.5j (si la for\u00eat laisse sortir)" },
+    hautcendre:      { j: 8,  note: "ouest, for\u00eat puis bocage",                              terrain: "for\u00eat 2j \u2192 lisi\u00e8re 1j \u2192 prairies 2j \u2192 bocage 3j" },
+    pierrelong:      { j: 6,  note: "nord, for\u00eat puis montagne",                             terrain: "for\u00eat 2j \u2192 lisi\u00e8re nord 1j \u2192 mont\u00e9e 3j" },
   },
   marceins: {
-    hautcendre:      { j: 8,  note: "nord, route imp\u00e9riale pav\u00e9e \u2014 patrouilles" },
-    les_cols:        { j: 2,  note: "sud, derni\u00e8re ville avant la fronti\u00e8re" },
-    hauts_plateaux:  { j: 6,  note: "nord-est, mont\u00e9e progressive" },
-    la_lisiere:      { j: 5,  note: "nord-est, plaine puis bocage" },
-    ramasse:         { j: 7,  note: "nord-ouest, contournement" },
+    hautcendre:      { j: 8,  note: "nord, route imp\u00e9riale pav\u00e9e \u2014 patrouilles",           terrain: "route imp\u00e9riale 8j, contr\u00f4les fr\u00e9quents, papiers demand\u00e9s" },
+    les_cols:        { j: 2,  note: "sud, derni\u00e8re ville avant la fronti\u00e8re",               terrain: "route pav\u00e9e en mont\u00e9e 2j, forteresse visible de loin" },
+    hauts_plateaux:  { j: 6,  note: "nord-est, mont\u00e9e progressive",                         terrain: "plaine 2j \u2192 collines 2j \u2192 plateau rocheux 2j" },
+    la_lisiere:      { j: 5,  note: "nord-est, plaine puis bocage",                           terrain: "route imp\u00e9riale 2j \u2192 plaine 2j \u2192 prairies 1j" },
+    ramasse:         { j: 7,  note: "nord-ouest, contournement",                              terrain: "plaine 3j \u2192 contournement ouest 2j \u2192 bocage 2j" },
   },
   les_cols: {
-    marceins:        { j: 2,  note: "nord, descente vers la plaine" },
-    hautcendre:      { j: 12, note: "nord, route imp\u00e9riale longue" },
+    marceins:        { j: 2,  note: "nord, descente vers la plaine",                          terrain: "descente pav\u00e9e 2j" },
+    hautcendre:      { j: 12, note: "nord, route imp\u00e9riale longue",                         terrain: "descente 2j \u2192 Marceins \u2192 route imp\u00e9riale 8j \u2192 approche Hautcendre 2j" },
   },
   marais_tortues: {
-    hautcendre:      { j: 9,  note: "nord-est, sortie des marais puis plaine" },
-    ramasse:         { j: 4,  note: "nord, bocage \u2014 Foulards connaissent le chemin" },
-    marceins:        { j: 7,  note: "est, contournement des marais" },
+    hautcendre:      { j: 9,  note: "nord-est, sortie des marais puis plaine",                terrain: "mar\u00e9cages 2j \u2192 terrain humide 3j \u2192 plaine 4j" },
+    ramasse:         { j: 4,  note: "nord, bocage \u2014 Foulards connaissent le chemin",         terrain: "sortie marais 1j \u2192 bocage 3j" },
+    marceins:        { j: 7,  note: "est, contournement des marais",                          terrain: "contournement est 3j \u2192 plaine 2j \u2192 route imp\u00e9riale 2j" },
   },
   ramasse: {
-    hautcendre:      { j: 9,  note: "est, bocage dense \u2014 routes r\u00e9sistance" },
-    marais_tortues:  { j: 4,  note: "sud, marais \u00e0 l'horizon" },
-    hauts_plateaux:  { j: 6,  note: "est, bocage puis mont\u00e9e" },
-    marceins:        { j: 7,  note: "sud-est, contournement" },
+    hautcendre:      { j: 9,  note: "est, bocage dense \u2014 routes r\u00e9sistance",               terrain: "bocage dense 4j \u2192 chemins cach\u00e9s 3j \u2192 bocage cultiv\u00e9 2j" },
+    marais_tortues:  { j: 4,  note: "sud, marais \u00e0 l'horizon",                               terrain: "bocage 3j \u2192 entr\u00e9e des marais 1j" },
+    hauts_plateaux:  { j: 6,  note: "est, bocage puis mont\u00e9e",                               terrain: "bocage 4j \u2192 mont\u00e9e progressive 2j" },
+    marceins:        { j: 7,  note: "sud-est, contournement",                                 terrain: "bocage 2j \u2192 contournement 3j \u2192 route imp\u00e9riale 2j" },
   },
   hamecon: {
-    hautcendre:      { j: 2,  note: "sud, plaine \u2014 route rapide" },
-    pierrelong:      { j: 5,  note: "est, c\u00f4te puis montagne" },
+    hautcendre:      { j: 2,  note: "sud, plaine \u2014 route rapide",                            terrain: "plaine cultiv\u00e9e 2j, route en bon \u00e9tat" },
+    pierrelong:      { j: 5,  note: "est, c\u00f4te puis montagne",                               terrain: "c\u00f4te 2j \u2192 mont\u00e9e rocheuse 3j" },
   },
 };
 
@@ -128,6 +143,8 @@ export function getDistances(lieu) {
   const dists = DISTANCES[key];
   if (!dists) return null;
   return Object.entries(dists)
-    .map(([dest, { j, note }]) => dest.replace(/_/g, " ") + " : " + j + " jour" + (j > 1 ? "s" : "") + " (" + note + ")")
+    .map(([dest, { j, note, terrain }]) =>
+      dest.replace(/_/g, " ") + " : " + j + " jour" + (j > 1 ? "s" : "") + " (" + note + ") [" + terrain + "]"
+    )
     .join(" | ");
 }
