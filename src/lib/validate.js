@@ -131,5 +131,23 @@ export function validateLd(ld) {
     clean.meteo = ld.meteo.slice(0, 100);
   }
 
+  // journal
+  const JOURNAL_CATEGORIES = ["lieux", "peuples", "pnj", "creatures", "magie", "faune_flore", "monde"];
+  if (ld.journal && typeof ld.journal === "object" && !Array.isArray(ld.journal)) {
+    const journal = {};
+    Object.entries(ld.journal).forEach(([cat, entries]) => {
+      if (!JOURNAL_CATEGORIES.includes(cat)) return;
+      if (typeof entries !== "object" || Array.isArray(entries)) return;
+      const cleanEntries = {};
+      Object.entries(entries).forEach(([id, fragment]) => {
+        if (typeof id === "string" && typeof fragment === "string" && fragment.length < 200) {
+          cleanEntries[id.slice(0, 50)] = fragment;
+        }
+      });
+      if (Object.keys(cleanEntries).length) journal[cat] = cleanEntries;
+    });
+    if (Object.keys(journal).length) clean.journal = journal;
+  }
+
   return clean;
 }

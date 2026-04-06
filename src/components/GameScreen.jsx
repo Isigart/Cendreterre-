@@ -7,7 +7,7 @@ import Input from "./Input.jsx";
 export default function GameScreen({
   hero, prose, streaming, going, err, rateLimit,
   pendingDeath, deadHero,
-  onPlay, onQuit, onCancelQuit, onEndReve, onNewDream, onReset,
+  onPlay, onQuit, onCancelQuit, onEndReve, onNewDream, onReset, onJournal,
 }) {
   const scrollRef = useRef(null);
   const bottomRef = useRef(null);
@@ -35,14 +35,20 @@ export default function GameScreen({
             {hero?.peuple?.nom}{hero?.metier?.nom ? ` · ${hero.metier.nom}` : ""}{` · ${hero?.lieu || ""}`}
           </span>
         </div>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: "0.6rem", alignItems: "center", flexShrink: 0 }}>
+          <button type="button" onClick={onJournal} style={{
+            background: "transparent", border: "1px solid " + C.dim,
+            borderRadius: 3, padding: "4px 10px",
+            color: C.muted, fontSize: 9, letterSpacing: 2,
+            cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
+          }}>{"journal"}</button>
           {!pendingDeath && !going && prose && (
             <button type="button" onClick={onQuit} style={{
               background: "transparent", border: "1px solid " + C.dim,
               borderRadius: 3, padding: "4px 10px",
               color: C.muted, fontSize: 9, letterSpacing: 2,
               cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
-            }}>{"quitter le r\u00eave"}</button>
+            }}>{"quitter"}</button>
           )}
           <button type="button" onClick={onReset} style={{
             background: "transparent", border: "none",

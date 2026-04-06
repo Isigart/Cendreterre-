@@ -367,6 +367,24 @@ export function applyLd(world, ld) {
   if (ld.evt)
     next.evt = { ...(world.evt || {}), ["evt_" + Date.now()]: ld.evt };
 
+  // Journal de connaissance du joueur
+  if (ld.journal && typeof ld.journal === "object") {
+    const journal = { ...(world.journal || {}) };
+    Object.entries(ld.journal).forEach(([categorie, entries]) => {
+      if (typeof entries !== "object" || Array.isArray(entries)) return;
+      if (!journal[categorie]) journal[categorie] = {};
+      Object.entries(entries).forEach(([id, fragment]) => {
+        if (typeof fragment !== "string") return;
+        const existing = journal[categorie][id] || [];
+        // Ne pas ajouter de doublon
+        if (!existing.some(f => f.toLowerCase() === fragment.toLowerCase())) {
+          journal[categorie][id] = [...existing, fragment].slice(-8);
+        }
+      });
+    });
+    next.journal = journal;
+  }
+
   return next;
 }
 
