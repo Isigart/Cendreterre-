@@ -46,6 +46,7 @@ Description d'un PNJ fig\u00e9e \u00e0 la premi\u00e8re mention. Un PNJ d\u00e9j
 Un PNJ qui \u00e9tait en train de faire quelque chose dans la sc\u00e8ne pr\u00e9c\u00e9dente continue de le faire \u2014 sauf si le temps a pass\u00e9 ou si une action l'interrompt.
 Espace : ce qui a \u00e9t\u00e9 d\u00e9crit existe et ne se contredit pas. Pour les lieux inconnus \u2014 inventer librement mais tenir ce qu'on vient de poser.
 Positions relatives : raisonner sur les positions des \u00e9l\u00e9ments entre eux. Elles d\u00e9finissent ce qui est accessible, risqu\u00e9, possible.
+TEMPS : le champ temps= dans le CTX donne le jour et le moment actuels. La lumi\u00e8re, la temp\u00e9rature, l'activit\u00e9 des gens d\u00e9pendent du moment. La nuit on ne voit pas, les portes sont ferm\u00e9es, les routes sont dangereuses. fd.moment est OBLIGATOIRE \u00e0 chaque sc\u00e8ne. Le temps avance naturellement \u2014 une action courte ne change pas le moment, une longue le fait progresser.
 HISTORIQUE : la section SC\u00c8NE PR\u00c9C\u00c9DENTE d\u00e9crit ce qui vient de se passer. La sc\u00e8ne courante EN EST LA SUITE DIRECTE. Ne pas r\u00e9initialiser la situation. Ne pas contredire ce qui vient d'\u00eatre \u00e9tabli. Continuer l\u00e0 o\u00f9 on s'\u00e9tait arr\u00eat\u00e9.
 
 PERSONNAGES
@@ -80,6 +81,8 @@ La narration.
 ///
 
 fd : ce qui change sur le h\u00e9ros.
+  moment:"aube|matin|midi|apres-midi|soir|nuit" \u2014 TOUJOURS pr\u00e9sent. Met \u00e0 jour le moment de la journ\u00e9e apr\u00e8s chaque sc\u00e8ne.
+  jours_ecoules:N \u2014 nombre de jours pass\u00e9s dans cette sc\u00e8ne (1 si une nuit passe, 0 si m\u00eame journ\u00e9e, 5 si voyage de 5 jours). Omettre si 0.
   traits_add:[...] \u2014 trait acquis par l'action
   humeur:"..." \u2014 \u00e9tat \u00e9motionnel courant
   physique:"..." \u2014 \u00e9tat physique : faim, froid, blessure, fatigue
