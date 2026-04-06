@@ -841,7 +841,7 @@ function Input({ onPlay, going }) {
           opacity: going ? 0.4 : 1,
         }}
       />
-      <button onClick={submit} disabled={!val.trim() || going}
+      <button type="button" onClick={submit} disabled={!val.trim() || going}
         style={{
           flexShrink: 0,
           background: "transparent",
@@ -880,7 +880,7 @@ function IntroScreen({ onCommencer, heroExistant }) {
         </p>
         {heroExistant ? (
           <div>
-            <button onClick={() => onCommencer("reprendre")} style={{
+            <button type="button" onClick={() => onCommencer("reprendre")} style={{
               background: "transparent", border: "1px solid " + C.accent,
               borderRadius: 3, padding: "12px 24px", color: C.accent,
               fontSize: 11, letterSpacing: 4, textTransform: "uppercase",
@@ -889,7 +889,7 @@ function IntroScreen({ onCommencer, heroExistant }) {
             }}>
               Reprendre — {heroExistant.nom}
             </button>
-            <button onClick={() => onCommencer("nouveau")} style={{
+            <button type="button" onClick={() => onCommencer("nouveau")} style={{
               background: "transparent", border: "1px solid " + C.dim,
               borderRadius: 3, padding: "10px 24px", color: C.muted,
               fontSize: 10, letterSpacing: 3, textTransform: "uppercase",
@@ -900,7 +900,7 @@ function IntroScreen({ onCommencer, heroExistant }) {
             </button>
           </div>
         ) : (
-          <button onClick={() => onCommencer("nouveau")} style={{
+          <button type="button" onClick={() => onCommencer("nouveau")} style={{
             background: "transparent", border: "1px solid " + C.accent,
             borderRadius: 3, padding: "12px 24px", color: C.accent,
             fontSize: 11, letterSpacing: 4, textTransform: "uppercase",
@@ -922,7 +922,7 @@ function PeupleScreen({ onChoix, onBack, cles }) {
   return (
     <div style={{ minHeight: "100vh", overflowY: "auto", padding: "2rem 1.5rem 8rem", maxWidth: 560, margin: "0 auto" }} className="fade-in">
       <div style={{ marginBottom: "2rem" }}>
-        <button onClick={onBack} style={{ background: "transparent", border: "none", color: C.muted, fontSize: 11, letterSpacing: 2, cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase" }}>← retour</button>
+        <button type="button" onClick={onBack} style={{ background: "transparent", border: "none", color: C.muted, fontSize: 11, letterSpacing: 2, cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase" }}>← retour</button>
       </div>
       <div style={{ marginBottom: "2rem", textAlign: "center" }}>
         <div style={{ fontSize: 22, color: C.accent, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif" }}>De quel peuple es-tu ?</div>
@@ -950,7 +950,7 @@ function MetierScreen({ peuple, onChoix, onBack, cles }) {
   return (
     <div style={{ minHeight: "100vh", overflowY: "auto", padding: "2rem 1.5rem 8rem", maxWidth: 560, margin: "0 auto" }} className="fade-in">
       <div style={{ marginBottom: "2rem" }}>
-        <button onClick={onBack} style={{ background: "transparent", border: "none", color: C.muted, fontSize: 11, letterSpacing: 2, cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase", marginBottom: "1.5rem", display: "block" }}>← retour</button>
+        <button type="button" onClick={onBack} style={{ background: "transparent", border: "none", color: C.muted, fontSize: 11, letterSpacing: 2, cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase", marginBottom: "1.5rem", display: "block" }}>← retour</button>
         <div style={{ fontSize: 10, letterSpacing: 4, color: C.muted, textTransform: "uppercase", marginBottom: "0.5rem" }}>{peuple.nom}</div>
         <div style={{ fontSize: 20, color: C.accent, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif" }}>Quel est ton métier ?</div>
       </div>
@@ -978,7 +978,7 @@ function NomScreen({ peuple, metier, onConfirm, onBack }) {
   return (
     <div style={{ minHeight: "100vh", overflowY: "auto", padding: "3rem 2rem 10rem" }} className="fade-in">
       <div style={{ width: "100%", maxWidth: 380, margin: "0 auto" }}>
-        <button onClick={onBack} style={{
+        <button type="button" onClick={onBack} style={{
           background: "transparent", border: "none",
           color: C.muted, fontSize: 11, letterSpacing: 2,
           cursor: "pointer", fontFamily: "inherit",
@@ -1010,7 +1010,7 @@ function NomScreen({ peuple, metier, onConfirm, onBack }) {
               outline: "none",
             }}
           />
-          <button onClick={() => { if (canSubmit) onConfirm(nom.trim(), genre); }}
+          <button type="button" onClick={() => { if (canSubmit) onConfirm(nom.trim(), genre); }}
             style={{
               flexShrink: 0, background: "transparent",
               border: "1px solid " + (canSubmit ? C.accent : C.dim),
@@ -1293,14 +1293,14 @@ export default function App() {
             </div>
             <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
               {!pendingDeath && !going && prose && (
-                <button onClick={() => setPendingDeath("abandon")} style={{
+                <button type="button" onClick={() => setPendingDeath("abandon")} style={{
                   background: "transparent", border: "1px solid " + C.dim,
                   borderRadius: 3, padding: "4px 10px",
                   color: C.muted, fontSize: 9, letterSpacing: 2,
                   cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
                 }}>quitter le rêve</button>
               )}
-              <button onClick={reset} style={{
+              <button type="button" onClick={reset} style={{
                 background: "transparent", border: "none",
                 color: C.dim, fontSize: 9, letterSpacing: 3,
                 cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
@@ -1337,7 +1337,7 @@ export default function App() {
                     ? "Le rêve s'arrête ici."
                     : "Tu te retires. " + (hero?.nom) + " continue quelque part."}
                 </div>
-                <button onClick={() => handleEndReve(pendingDeath)} style={{
+                <button type="button" onClick={() => handleEndReve(pendingDeath)} style={{
                   background: "transparent", border: "1px solid " + C.dim,
                   borderRadius: 3, padding: "10px 24px",
                   color: C.muted, fontSize: 10, letterSpacing: 3,
@@ -1346,7 +1346,7 @@ export default function App() {
                   {pendingDeath === "mort" ? "Continuer" : "Quitter"}
                 </button>
                 {pendingDeath === "abandon" && (
-                  <button onClick={() => setPendingDeath(null)} style={{
+                  <button type="button" onClick={() => setPendingDeath(null)} style={{
                     background: "transparent", border: "none",
                     color: C.muted, fontSize: 9, letterSpacing: 2,
                     textTransform: "uppercase", cursor: "pointer",
@@ -1389,7 +1389,7 @@ export default function App() {
                     ))}
                   </div>
                 )}
-                <button onClick={() => { setDeadHero(null); setProse(""); setScreen("intro"); }} style={{
+                <button type="button" onClick={() => { setDeadHero(null); setProse(""); setScreen("intro"); }} style={{
                   background: "transparent", border: "1px solid " + C.dim,
                   borderRadius: 3, padding: "10px 24px",
                   color: C.muted, fontSize: 10, letterSpacing: 3,
