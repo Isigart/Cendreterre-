@@ -28,6 +28,7 @@ export default async function handler(req) {
       headers: {
         "Content-Type": "application/json",
         "anthropic-version": "2023-06-01",
+        "anthropic-beta": "prompt-caching-2024-07-31",
         "x-api-key": apiKey,
       },
       body: JSON.stringify({
