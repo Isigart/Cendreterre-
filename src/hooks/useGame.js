@@ -156,8 +156,7 @@ export default function useGame() {
       };
       if (data.ld?.consequences?.length) snapshot.consequences = data.ld.consequences;
       if (data.ld?.meteo) snapshot.meteo = data.ld.meteo;
-      if (newHero.physique) snapshot.physique = newHero.physique;
-      if (newHero.humeur) snapshot.humeur = newHero.humeur;
+      if (newHero.conditions?.length) snapshot.conditions = newHero.conditions;
       if (newHero.inventaire?.length) snapshot.inventaire = newHero.inventaire;
       if (data.ld?.pnj) {
         snapshot.pnj = Object.entries(data.ld.pnj).map(([nom, p]) =>
