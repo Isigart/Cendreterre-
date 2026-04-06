@@ -167,15 +167,14 @@ export function buildCtx(hero, world, hist, intention) {
       bits.push(l.statut === "mort" ? "mort \u00e0 " + l.lieu : "disparu vers " + l.lieu);
       if (l.faits?.length) bits.push("faits: " + l.faits.slice(-5).join(" | "));
       if (l.pnj && Object.keys(l.pnj).length) {
-        const souvenirs = Object.entries(l.pnj)
-          .filter(([, p]) => p.souvenir)
-          .map(([, p]) => p.souvenir)
+        const impliques = Object.entries(l.pnj)
+          .map(([nom, p]) => nom + " (" + p.dernierStatut + ")")
           .slice(0, 4);
-        if (souvenirs.length) bits.push("souvenirs PNJ: " + souvenirs.join(" | "));
+        if (impliques.length) bits.push("PNJ impliqu\u00e9s: " + impliques.join(", "));
       }
       parts.push("\u25c6 " + bits.join(" / "));
     });
-    parts.push("R\u00c8GLE : le h\u00e9ros actuel est un INCONNU. Les PNJ ne le confondent pas avec le pr\u00e9c\u00e9dent. Mais leur attitude a \u00e9t\u00e9 chang\u00e9e par lui. Un PNJ aid\u00e9 est plus ouvert. Un PNJ trahi est m\u00e9fiant. Les gens murmurent sur 'quelqu'un qui est pass\u00e9'.");
+    parts.push("R\u00c8GLE LEGACY : le h\u00e9ros actuel est un INCONNU TOTAL. Les PNJ n'ont AUCUN avis sur lui \u2014 ni positif ni n\u00e9gatif. Un PNJ alli\u00e9 de l'ancien n'est pas alli\u00e9 du nouveau. Un ennemi de l'ancien n'est pas ennemi du nouveau. Seules les CONS\u00c9QUENCES persistent : une porte ouverte reste ouverte, un garde tu\u00e9 reste mort, une dette impay\u00e9e existe encore. Les PNJ peuvent \u00e9voquer le pass\u00e9 entre eux mais ne projettent rien sur le nouveau h\u00e9ros. Le joueur peut incarner l'oppos\u00e9 de son pr\u00e9c\u00e9dent h\u00e9ros.");
   }
 
   parts.push("");
@@ -414,15 +413,11 @@ export function buildLegacy(hero, world) {
   });
   (world.consequences || []).forEach(c => faits.push(c));
 
-  // PNJ affect\u00e9s par ce h\u00e9ros
-  const pnjAffectes = {};
+  // PNJ impliqu\u00e9s (faits, pas jugements)
+  const pnjImpliques = {};
   Object.entries(world.pnj || {}).forEach(([nom, p]) => {
     if (p.statut && p.statut !== "neutre") {
-      pnjAffectes[nom] = {
-        statut: p.statut,
-        humeur: p.humeur || null,
-        souvenir: p.description ? nom + " \u2014 " + (p.statut === "allie" ? "aid\u00e9 par" : "m\u00e9fiant envers") + " le pr\u00e9c\u00e9dent \u00e9tranger" : null,
-      };
+      pnjImpliques[nom] = { dernierStatut: p.statut, position: p.position || null };
     }
   });
 
@@ -433,7 +428,7 @@ export function buildLegacy(hero, world) {
     lieu:      hero.lieu || "Cendreterre",
     scenes:    hero.sceneCount || 0,
     faits:     faits.slice(-10),
-    pnj:       pnjAffectes,
+    pnj:       pnjImpliques,
     conditions: hero.conditions || [],
     inventaire: hero.inventaire || [],
   };
