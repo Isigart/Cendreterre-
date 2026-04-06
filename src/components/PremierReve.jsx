@@ -73,10 +73,11 @@ export default function PremierReve({ onNom }) {
     <div style={{
       minHeight: "100vh", display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
-      padding: "2rem 2rem 40vh", background: C.bg,
+      padding: "2rem 1.5rem 40vh", background: C.bg,
+      overflow: "hidden", width: "100%", maxWidth: "100vw",
     }}>
       {nomVisible && (
-        <div style={{ animation: "fadeSlow 1s ease both", textAlign: "center", maxWidth: 320 }}>
+        <div style={{ animation: "fadeSlow 1s ease both", textAlign: "center", maxWidth: 280, width: "100%", padding: "0 0.5rem" }}>
           <p style={{
             fontSize: 14, color: C.muted, fontStyle: "italic",
             fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
@@ -94,8 +95,8 @@ export default function PremierReve({ onNom }) {
       )}
 
       {inputVisible && (
-        <div style={{ width: "100%", maxWidth: 260, padding: "0 1rem", animation: "fadeUp .8s ease both" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+        <div style={{ width: "100%", maxWidth: 240, animation: "fadeUp .8s ease both" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <input
               type="text" value={nom}
               onChange={e => setNom(e.target.value)}
