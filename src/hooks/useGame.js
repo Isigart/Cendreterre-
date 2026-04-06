@@ -117,7 +117,7 @@ export default function useGame() {
 
     try {
       const { prose: result, data } = await callLLM(ctx, intentionFinale, chunk => {
-        setProse(prev => prev + chunk);
+        setProse(chunk);
       });
       setStreaming(false);
       setProse(result);

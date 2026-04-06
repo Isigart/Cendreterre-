@@ -33,16 +33,28 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: max_tokens || 1500,
-        stream: false,
+        stream: true,
         system,
         messages,
       }),
     });
 
-    const data = await response.json();
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { "Content-Type": "application/json" },
+    if (!response.ok) {
+      const text = await response.text();
+      return new Response(text, {
+        status: response.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Proxy the SSE stream directly to the client
+    return new Response(response.body, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      },
     });
   } catch (e) {
     return new Response(
