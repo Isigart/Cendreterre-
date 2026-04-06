@@ -5,7 +5,13 @@ export async function callLLM(ctx, intention, onChunk) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      system: SYSTEM_PROMPT,
+      system: [
+        {
+          type: "text",
+          text: SYSTEM_PROMPT,
+          cache_control: { type: "ephemeral" },
+        },
+      ],
       messages: [{ role: "user", content: ctx + "\n\nINTENTION: " + intention }],
       max_tokens: 1500,
     }),
