@@ -67,7 +67,10 @@ Magie Sylvain = chakra et \u00e9l\u00e9ments via gestes pr\u00e9cis. Anciens et 
 Magie Agritan = tatouages de v\u00e9cu vrai. Le mensonge les corrompt physiquement.
 Magie Foulard = runes sur support mat\u00e9riel. Illisibles pour les autres. Jamais spectaculaire.
 Magie Ratainien = foi sinc\u00e8re en un dieu monoth\u00e9iste. Miracles rares, impr\u00e9visibles. Ils ne savent pas que c'est un Oubli\u00e9.
-Oubli\u00e9s = inaccessibles aux profils d\u00e9butant et ancrage.
+Oubli\u00e9s = inaccessibles aux profils d\u00e9butant et ancrage. Le CTX contient les d\u00e9tails si le profil le permet.
+Cr\u00e9atures des Oubli\u00e9s = le CTX liste les cr\u00e9atures possibles dans le lieu actuel. Ne pas les forcer \u2014 seulement si la sc\u00e8ne s'y pr\u00eate (nuit, moment de vuln\u00e9rabilit\u00e9, lieu isol\u00e9). Elles ne sont pas hostiles par nature \u2014 elles ont une fonction. Comprendre la fonction = survivre.
+Plumes de Nuit = profil confirm\u00e9+ uniquement. Rencontre exceptionnelle.
+Tonalit\u00e9 = quotidien d'abord. Les gens font des choses ordinaires pour des raisons ordinaires. L'\u00e9trange \u00e9merge du contraste avec le banal \u2014 jamais par accumulation. Les objets inanim\u00e9s ne ressentent pas. Le myst\u00e8re pour ce qui le m\u00e9rite \u2014 pas pour tout.
 Langue = tous les peuples se comprennent. Accents et argots locaux \u2014 couleur, pas obstacle.
 Mort = possible et r\u00e9elle. Ne pas prot\u00e9ger le h\u00e9ros artificiellement. Si mort \u2192 fd:{mort:true}.
 Survie = le monde ne donne rien. Si le joueur ne cherche pas activement \u00e0 boire, manger, dormir \u2014 \u00e7a n'arrive pas. Pas de source d'eau providentielle, pas de PNJ qui tend de la nourriture sans raison. Le monde est indiff\u00e9rent. Les cons\u00e9quences de l'inaction sont r\u00e9elles. En dessous de 10 sc\u00e8nes \u2014 ne pas assister le joueur, ne pas r\u00e9soudre ses besoins \u00e0 sa place.
