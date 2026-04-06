@@ -3,11 +3,43 @@ import { loadHero, saveHero, delHero, loadWorld, saveWorld } from "../lib/storag
 import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
+import { validateFd, validateLd } from "../lib/validate.js";
 import { OUVERTURE_SURVIE } from "../data/narration.js";
 import { PEUPLES } from "../data/peuples.js";
 import { LIEUX_BASE, lieuKey } from "../data/lieux.js";
 
 const EMPTY_WORLD = { pnj: {}, objets: {}, fils: [], lieux: {}, cles: {}, legacy: [], evt: {} };
+
+function buildResumeProse(hero) {
+  const parts = [];
+  parts.push("Le r\u00eave reprend.\n");
+
+  // O\u00f9 et quand
+  parts.push("Tu es \u00e0 " + (hero.lieu || "quelque part") + ". Jour " + (hero.jour || 1) + ", " + (hero.moment || "matin") + ".");
+
+  // Conditions actives
+  const conds = hero.conditions || [];
+  if (conds.length) {
+    parts.push("Tu ressens : " + conds.join(", ") + ".");
+  }
+
+  // Inventaire
+  const inv = hero.inventaire || [];
+  if (inv.length) {
+    parts.push("Sur toi : " + inv.join(", ") + ".");
+  }
+
+  // Dernier souvenir
+  const hist = hero.hist || [];
+  const dernier = hist.slice(-1)[0];
+  if (dernier) {
+    const txt = typeof dernier === "string" ? dernier : dernier.prose || "";
+    if (txt) parts.push("\nDernier souvenir \u2014 " + txt);
+  }
+
+  parts.push("\n\u2014");
+  return parts.join("\n");
+}
 
 export default function useGame() {
   const [screen, setScreen] = useState("loading");
@@ -26,6 +58,7 @@ export default function useGame() {
   const histRef = useRef([]);
   const heroRef = useRef(null);
   const worldRef = useRef(EMPTY_WORLD);
+  const lastProseRef = useRef(null);
   const tapRef = useRef(0);
 
   // Initial load
@@ -37,11 +70,7 @@ export default function useGame() {
         histRef.current = savedHero.hist || [];
         setHero(savedHero);
         if ((savedHero.sceneCount || 0) > 0) {
-          const dernierSnippet = (savedHero.hist || []).slice(-1)[0];
-          if (dernierSnippet) {
-            const txt = typeof dernierSnippet === "string" ? dernierSnippet : dernierSnippet.prose || "";
-            if (txt) setProse("[ \u2026 ]\n\n" + txt + "\n\n\u2014");
-          }
+          setProse(buildResumeProse(savedHero));
           setScreen("jeu");
           return;
         }
@@ -60,14 +89,7 @@ export default function useGame() {
   function handleIntro(action) {
     if (action === "reprendre" && heroRef.current) {
       setScreen("jeu");
-      const snippets = histRef.current.slice(-2).map(s =>
-        typeof s === "string" ? s : s.prose || ""
-      ).filter(Boolean);
-      if (snippets.length) {
-        setProse("[ \u2026 ]\n\n" + snippets.join("\n\n[ \u2026 ]\n\n") + "\n\n\u2014");
-      } else {
-        setProse("Tu reprends l\u00e0 o\u00f9 tu en \u00e9tais.\n\nQu'est-ce que tu fais ?");
-      }
+      setProse(buildResumeProse(heroRef.current));
     } else {
       setScreen("creation_peuple");
     }
@@ -123,13 +145,18 @@ export default function useGame() {
     try {
       const { prose: result, data } = await callLLM(ctx, intentionFinale, chunk => {
         setProse(chunk);
-      });
+      }, lastProseRef.current);
       setStreaming(false);
       setProse(result);
+      lastProseRef.current = result;
 
-      let newHero = skipHist ? h : applyFd(h, data.fd || {});
+      // Valider les donn\u00e9es avant de les appliquer
+      const fd = validateFd(data.fd || {});
+      const ld = validateLd(data.ld || {});
 
-      if (data.fd && data.fd.mort) {
+      let newHero = skipHist ? h : applyFd(h, fd);
+
+      if (fd.mort) {
         const snapshot = { prose: result.slice(0, 400), intention: intention, lieu: newHero.lieu };
         const newHist = [...histRef.current, snapshot].slice(-6);
         histRef.current = newHist;
@@ -142,7 +169,7 @@ export default function useGame() {
       }
 
       if (!skipHist) {
-        let newWorld = applyLd(worldRef.current, data.ld || {});
+        let newWorld = applyLd(worldRef.current, ld);
         newWorld = { ...newWorld, cles: computeAutoCles(newHero, newWorld) };
         worldRef.current = newWorld;
         setWorld(newWorld);
@@ -154,12 +181,12 @@ export default function useGame() {
         intention: skipHist ? null : intention,
         lieu: newHero.lieu,
       };
-      if (data.ld?.consequences?.length) snapshot.consequences = data.ld.consequences;
-      if (data.ld?.meteo) snapshot.meteo = data.ld.meteo;
+      if (ld.consequences?.length) snapshot.consequences = ld.consequences;
+      if (ld.meteo) snapshot.meteo = ld.meteo;
       if (newHero.conditions?.length) snapshot.conditions = newHero.conditions;
       if (newHero.inventaire?.length) snapshot.inventaire = newHero.inventaire;
-      if (data.ld?.pnj) {
-        snapshot.pnj = Object.entries(data.ld.pnj).map(([nom, p]) =>
+      if (ld.pnj) {
+        snapshot.pnj = Object.entries(ld.pnj).map(([nom, p]) =>
           nom + (p.position ? " \u2014 " + p.position : "") + (p.humeur ? " [" + p.humeur + "]" : "")
         );
       }
