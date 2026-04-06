@@ -1,6 +1,16 @@
 import { SYSTEM_PROMPT } from "../data/narration.js";
 
-export async function callLLM(ctx, intention, onChunk) {
+export async function callLLM(ctx, intention, onChunk, lastProse) {
+  // Multi-turn : si on a la prose pr\u00e9c\u00e9dente, l'envoyer comme \u00e9change
+  const messages = [];
+  if (lastProse) {
+    messages.push({ role: "user", content: ctx + "\n\nINTENTION: reprise" });
+    messages.push({ role: "assistant", content: "///PROSE\n" + lastProse + "\n///\n///DATA\n{\"fd\":{},\"ld\":{}}\n///" });
+    messages.push({ role: "user", content: "INTENTION: " + intention });
+  } else {
+    messages.push({ role: "user", content: ctx + "\n\nINTENTION: " + intention });
+  }
+
   const response = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -12,7 +22,7 @@ export async function callLLM(ctx, intention, onChunk) {
           cache_control: { type: "ephemeral" },
         },
       ],
-      messages: [{ role: "user", content: ctx + "\n\nINTENTION: " + intention }],
+      messages,
       max_tokens: 1500,
     }),
   });
