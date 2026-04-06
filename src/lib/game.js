@@ -3,6 +3,7 @@ import { PROFIL_DIRECTIVE, profilNarratif } from "../data/narration.js";
 import { PEUPLES, METIERS } from "../data/peuples.js";
 import { randomPrenom } from "../data/prenoms.js";
 import { buildLoreCtx } from "../data/lore.js";
+import { buildPnjCtx } from "../data/pnj.js";
 
 export function initHero(peuple, metier, nom, genre) {
   const lieu = peuple.lieu[Math.floor(Math.random() * peuple.lieu.length)];
@@ -128,6 +129,13 @@ export function buildCtx(hero, world, hist) {
   if (lore) {
     parts.push("");
     parts.push(lore);
+  }
+
+  // PNJ r\u00e9currents du lieu
+  const pnjLore = buildPnjCtx(hero.lieu);
+  if (pnjLore) {
+    parts.push("");
+    parts.push(pnjLore);
   }
 
   const lieuData = (world.lieux || {})[key];
