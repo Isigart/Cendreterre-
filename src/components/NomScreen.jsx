@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C } from "../styles/theme.js";
 
 export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
   const [nom, setNom] = useState("");
   const [genre, setGenre] = useState(null);
   const canSubmit = nom.trim().length >= 2;
+  const formRef = useRef(null);
 
   function submit() {
     if (canSubmit) onConfirm(nom.trim(), genre);
   }
 
+  function handleFocus() {
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 350);
+  }
+
   return (
-    <div style={{ minHeight: "100vh", overflowY: "auto", padding: "3rem 2rem 6rem" }} className="fade-in">
+    <div style={{ minHeight: "100vh", overflowY: "auto", padding: "3rem 2rem 50vh" }} className="fade-in">
       <div style={{ width: "100%", maxWidth: 380, margin: "0 auto" }}>
         <button type="button" onClick={onBack} style={{
           background: "transparent", border: "none",
@@ -32,11 +39,12 @@ export default function NomScreen({ peuple, metier, onConfirm, onBack }) {
           )}
         </div>
 
-        <div style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.6rem" }}>{"Nom"}</div>
+        <div ref={formRef} style={{ fontSize: 10, letterSpacing: 3, color: C.muted, textTransform: "uppercase", marginBottom: "0.6rem" }}>{"Nom"}</div>
         <input
           type="text" value={nom}
           onChange={e => setNom(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter") submit(); }}
+          onFocus={handleFocus}
           placeholder="un nom..." maxLength={28} autoFocus
           style={{
             width: "100%", background: "transparent", border: "none",
