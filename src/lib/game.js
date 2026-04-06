@@ -15,6 +15,7 @@ export function initHero(peuple, metier, nom, genre) {
     lieuxVisites: [lieuKey(lieu)],
     jour: 1,
     moment: "matin",
+    conditions: ["affam\u00e9", "assoiff\u00e9", "d\u00e9sorient\u00e9"],
     traits: {
       public:  [],
       stats:   metier ? [metier.desc] : [],
@@ -54,8 +55,12 @@ export function buildCtx(hero, world, hist) {
   parts.push("lieu_actuel=" + hero.lieu + " \u2014 le h\u00e9ros y est, ne pas d\u00e9placer sans intention explicite");
   parts.push("temps=jour " + (hero.jour || 1) + ", " + (hero.moment || "matin"));
   parts.push("scene=" + (hero.sceneCount || 0));
-  if (hero.physique) parts.push("physique=" + hero.physique);
-  if (hero.humeur)   parts.push("humeur=" + hero.humeur);
+  const conditions = hero.conditions || [];
+  if (conditions.length) {
+    parts.push("conditions=[" + conditions.join(", ") + "]");
+  } else {
+    parts.push("conditions=[aucune]");
+  }
   if (hero.inventaire && hero.inventaire.length)
     parts.push("inventaire=[" + hero.inventaire.join(", ") + "]");
   if (hero.traits.acquis && hero.traits.acquis.length)
@@ -144,8 +149,7 @@ export function buildCtx(hero, world, hist) {
         if (s.prose)        lines.push("prose=" + s.prose);
         if (s.lieu)         lines.push("lieu=" + s.lieu);
         if (s.meteo)        lines.push("meteo=" + s.meteo);
-        if (s.physique)     lines.push("physique_hero=" + s.physique);
-        if (s.humeur)       lines.push("humeur_hero=" + s.humeur);
+        if (s.conditions?.length) lines.push("conditions=[" + s.conditions.join(", ") + "]");
         if (s.inventaire?.length) lines.push("inventaire=[" + s.inventaire.join(", ") + "]");
         if (s.pnj?.length)  lines.push("pnj_presents=[" + s.pnj.join(" | ") + "]");
         if (s.consequences?.length) lines.push("consequences=[" + s.consequences.join(" | ") + "]");
@@ -203,8 +207,24 @@ export function applyFd(hero, fd) {
     next.traits = { ...hero.traits, acquis };
   }
 
-  if (fd.humeur)   next.humeur = fd.humeur;
-  if (fd.physique)  next.physique = fd.physique;
+  if (fd.conditions_add && fd.conditions_add.length) {
+    const conds = [...(hero.conditions || [])];
+    fd.conditions_add.forEach(c => { if (!conds.includes(c)) conds.push(c); });
+    next.conditions = conds;
+  }
+  if (fd.conditions_del && fd.conditions_del.length) {
+    next.conditions = (next.conditions || hero.conditions || [])
+      .filter(c => !fd.conditions_del.some(d => c.toLowerCase().includes(d.toLowerCase())));
+  }
+  if (fd.conditions_replace && typeof fd.conditions_replace === "object") {
+    const conds = [...(next.conditions || hero.conditions || [])];
+    Object.entries(fd.conditions_replace).forEach(([old, nouveau]) => {
+      const idx = conds.findIndex(c => c.toLowerCase().includes(old.toLowerCase()));
+      if (idx >= 0) conds[idx] = nouveau;
+      else conds.push(nouveau);
+    });
+    next.conditions = conds;
+  }
 
   if (fd.inventaire_add && fd.inventaire_add.length) {
     const inv = [...(hero.inventaire || [])];

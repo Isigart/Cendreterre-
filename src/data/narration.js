@@ -81,15 +81,28 @@ La narration.
 ///
 
 fd : ce qui change sur le h\u00e9ros.
-  moment:"aube|matin|midi|apres-midi|soir|nuit" \u2014 TOUJOURS pr\u00e9sent. Met \u00e0 jour le moment de la journ\u00e9e apr\u00e8s chaque sc\u00e8ne.
-  jours_ecoules:N \u2014 nombre de jours pass\u00e9s dans cette sc\u00e8ne (1 si une nuit passe, 0 si m\u00eame journ\u00e9e, 5 si voyage de 5 jours). Omettre si 0.
-  traits_add:[...] \u2014 trait acquis par l'action
-  humeur:"..." \u2014 \u00e9tat \u00e9motionnel courant
-  physique:"..." \u2014 \u00e9tat physique : faim, froid, blessure, fatigue
+  moment:"aube|matin|midi|apres-midi|soir|nuit" \u2014 TOUJOURS pr\u00e9sent. Met \u00e0 jour le moment de la journ\u00e9e.
+  jours_ecoules:N \u2014 jours pass\u00e9s (1 si une nuit, 5 si voyage de 5j). Omettre si 0.
+  conditions_add:["condition"] \u2014 ajouter une condition active
+  conditions_del:["condition"] \u2014 retirer une condition (match partiel : "faim" retire "affam\u00e9 depuis 2j")
+  conditions_replace:{"ancien":"nouveau"} \u2014 aggraver ou am\u00e9liorer (ex: {"affam\u00e9":"affam\u00e9 depuis 3j"})
+  traits_add:[...] \u2014 trait permanent acquis par l'action
   inventaire_add:["objet trouv\u00e9"] \u2014 objet ajout\u00e9
   inventaire_del:["objet perdu"] \u2014 objet consomm\u00e9 ou perdu
   lieu:"..." \u2014 nouveau lieu si d\u00e9placement r\u00e9el
   mort:true \u2014 si le h\u00e9ros meurt
+
+CONDITIONS \u2014 SYST\u00c8ME CENTRAL
+Le champ conditions= dans le CTX liste les \u00e9tats actifs du h\u00e9ros. Trois types :
+- Corps : faim, soif, froid, blessure, fatigue, repos\u00e9, nourri... S'aggravent si ignor\u00e9s.
+- Esprit : peur, confiance, col\u00e8re, d\u00e9termination... \u00c9voluent avec les \u00e9v\u00e9nements.
+- Social : connu, recherch\u00e9, bienvenu, suspect... Les PNJ r\u00e9agissent diff\u00e9remment.
+
+R\u00e8gles :
+- Les conditions n\u00e9gatives S'AGGRAVENT si le joueur ne les r\u00e9sout pas. "affam\u00e9" \u2192 "affam\u00e9 depuis 2j" \u2192 "\u00e9puis\u00e9 par la faim" \u2192 mort possible.
+- Les conditions positives DISPARAISSENT naturellement apr\u00e8s effort ou temps. "repos\u00e9" dispara\u00eet apr\u00e8s une journ\u00e9e d'effort.
+- Le monde R\u00c9AGIT aux conditions : un h\u00e9ros bless\u00e9 attire la piti\u00e9 ou les pr\u00e9dateurs. Un h\u00e9ros recherch\u00e9 se fait contr\u00f4ler. Un h\u00e9ros affam\u00e9 tremble et se fait remarquer.
+- Mets \u00e0 jour les conditions \u00e0 CHAQUE sc\u00e8ne. Si rien ne change, ne rien \u00e9mettre. Si le h\u00e9ros mange \u2192 del "faim", add "nourri". Si 2 jours sans manger \u2192 replace {"affam\u00e9":"affam\u00e9 depuis 2j"}.
 
 ld : ce qui change dans le monde.
   pnj:{Nom:{description:"fig\u00e9e premi\u00e8re mention",genre:"M/F/N",statut:"allie/ennemi/neutre",position:"o\u00f9 il est",humeur:"\u00e9tat \u00e9motionnel courant"}}
