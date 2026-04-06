@@ -94,18 +94,18 @@ export default function PremierReve({ onNom }) {
       )}
 
       {inputVisible && (
-        <div style={{ width: "100%", maxWidth: 300, animation: "fadeUp .8s ease both" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+        <div style={{ width: "100%", maxWidth: 260, padding: "0 1rem", animation: "fadeUp .8s ease both" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
             <input
               type="text" value={nom}
               onChange={e => setNom(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter") confirmer(); }}
-              autoFocus maxLength={28}
+              autoFocus maxLength={20}
               style={{
-                flex: 1, background: "transparent", border: "none",
+                flex: 1, minWidth: 0, background: "transparent", border: "none",
                 borderBottom: "1px solid " + C.dim,
-                padding: "0.6rem 0", color: C.accent,
-                fontSize: 24, fontStyle: "italic",
+                padding: "0.5rem 0", color: C.accent,
+                fontSize: 20, fontStyle: "italic",
                 fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
                 outline: "none", textAlign: "center",
               }}
@@ -115,7 +115,7 @@ export default function PremierReve({ onNom }) {
                 flexShrink: 0, background: "transparent",
                 border: "1px solid " + (nom.trim().length >= 2 ? C.accent : C.dim),
                 borderRadius: 3, color: nom.trim().length >= 2 ? C.accent : C.dim,
-                fontSize: 18, width: 40, height: 40,
+                fontSize: 16, width: 36, height: 36,
                 cursor: nom.trim().length >= 2 ? "pointer" : "default",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all .15s",
