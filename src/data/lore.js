@@ -207,17 +207,20 @@ export const LORE_REGIONS = {
 
 import { lieuKey } from "./lieux.js";
 
-export function buildLoreCtx(heroLieu, heroPeuple, profil) {
+export function buildLoreCtx(heroLieu, heroPeuple, profil, intention) {
   const key = lieuKey(heroLieu);
   const parts = [];
 
-  // \u00c9conomie locale
-  parts.push("\u00c9CONOMIE");
-  parts.push(ECONOMIE.monnaie);
-  parts.push("prix=[" + ECONOMIE.prix.survie + " | " + ECONOMIE.prix.equipement + "]");
-  parts.push("rare=[" + ECONOMIE.prix.rare + "]");
+  // \u00c9conomie : monnaie toujours, prix d\u00e9taill\u00e9s seulement si commerce/achat
+  const intentionLower = (intention || "").toLowerCase();
+  const wantsCommerce = /ach\u00e8te|achet|vend|march\u00e9|prix|payer|denier|commerce|troqu|n\u00e9goci|combien co\u00fbte|boutique|\u00e9choppe|auberge|manger|boire|repas/.test(intentionLower);
   const ecoLocale = ECONOMIE.regions[key];
+  parts.push("\u00c9CONOMIE=" + ECONOMIE.monnaie.split(".")[0] + ".");
   if (ecoLocale) parts.push("march\u00e9_local=" + ecoLocale);
+  if (wantsCommerce) {
+    parts.push("prix=[" + ECONOMIE.prix.survie + " | " + ECONOMIE.prix.equipement + "]");
+    parts.push("rare=[" + ECONOMIE.prix.rare + "]");
+  }
 
   // Lore de la r\u00e9gion actuelle
   const regionLore = LORE_REGIONS[key];
@@ -259,18 +262,6 @@ export function buildLoreCtx(heroLieu, heroPeuple, profil) {
       parts.push("PEUPLE LOCAL \u2014 " + localPeuple.toUpperCase());
       parts.push(local.culture);
     }
-  }
-
-  // Monde g\u00e9n\u00e9ral (profil \u00e9mergent+)
-  if (profil === "emergent" || profil === "confirme" || profil === "profond") {
-    parts.push("");
-    parts.push("MONDE");
-    parts.push(MONDE.nom_secret);
-    parts.push(MONDE.resistance);
-    parts.push(MONDE.occupation);
-    if (key === "hamecon" || key === "hautcendre") parts.push(MONDE.fleuve);
-    if (key === "hautcendre") parts.push(MONDE.goulin);
-    if (key === "les_cols") parts.push(MONDE.passage);
   }
 
   // Oubli\u00e9s (\u00e9mergent+)
