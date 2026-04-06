@@ -12,6 +12,7 @@ function storageLoad(key) {
     const v = localStorage.getItem(key);
     return Promise.resolve(v ? JSON.parse(v) : null);
   } catch(e) { return Promise.resolve(null); }
+}
 
 
 function storageSave(key, val) {
