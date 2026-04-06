@@ -55,7 +55,7 @@ export default function Input({ onPlay, going }) {
           display: "flex", alignItems: "center", justifyContent: "center",
           transition: "all .15s",
         }}>
-        \u2713
+        {"\u2713"}
       </button>
     </div>
   );

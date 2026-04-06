@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ceux qui ont été lus</title>
+  <style>
+    body { background: #0a0704; margin: 0; }
+    #root { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    #root:empty::after { content: '···'; color: #2a1f12; font-size: 10px; letter-spacing: 5px; animation: p 1.8s ease infinite; }
+    @keyframes p { 0%,100%{opacity:.3} 50%{opacity:1} }
+  </style>
 </head>
 <body>
   <div id="root"></div>
