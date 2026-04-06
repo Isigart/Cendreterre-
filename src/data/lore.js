@@ -2,6 +2,34 @@
 // LORE DE CENDRETERRE — inject\u00e9 dans le contexte selon le lieu
 // ============================================================
 
+// --- \u00c9CONOMIE (toujours inject\u00e9) ---
+
+export const ECONOMIE = {
+  monnaie: "Denier imp\u00e9rial \u2014 seule monnaie officielle, seule accept\u00e9e pour les taxes. Pi\u00e8ces de cuivre (1 denier), d'argent (10 deniers), d'or (100 deniers). Le troc est courant partout sauf \u00e0 Marceins \u2014 les gens pr\u00e9f\u00e8rent \u00e9changer que payer l'empire.",
+  prix: {
+    survie:    "un repas : 2-3 deniers | une nuit : 1-2 deniers | une gourde d'eau : gratuit (puits) ou 1 denier (auberge) | ration de voyage 3j : 5 deniers",
+    equipement:"couteau simple : 5 deniers | hache : 10 deniers | arc : 20 deniers | \u00e9p\u00e9e : 30-50 deniers | armure cuir : 40 deniers | cheval : 200+ deniers | mule : 80 deniers",
+    rare:      "cartouche magique cendreux : 50 deniers (rare, ill\u00e9gale) | mat\u00e9riau conducteur : 100+ deniers le lot | liane sylvaine : introuvable \u00e0 l'achat | rune foulard : jamais en deniers (service contre service)",
+    luxe:      "vin des Coteaux non tax\u00e9 : 30 deniers la barrique (contrebande) | information foulard : se paie en services | passage clandestin vers l'empire : 500+ deniers",
+  },
+  regions: {
+    hautcendre:     "march\u00e9 mixte, ateliers de circuits au march\u00e9 noir, l'empire taxe tout ce qui passe par les portes",
+    ramasse:        "troc quasi-exclusif, la r\u00e9sistance finance par contrebande, m\u00e9fiance envers les pi\u00e8ces imp\u00e9riales",
+    marceins:       "tout en deniers, prix gonfl\u00e9s, march\u00e9 imp\u00e9rial officiel, pas de march\u00e9 noir visible",
+    les_cols:       "prix d'altitude \u2014 tout co\u00fbte double, les soldats font circuler la monnaie",
+    la_croisee:     "tout s'\u00e9change \u2014 deniers, troc, services, dettes. Les Foulards fixent les taux tacitement",
+    les_coteaux:    "le vin est la vraie monnaie, contrebande active par les chemins de traverse",
+    le_perigord:    "peu de commerce, autosuffisance, les radicaux paient en protection",
+    pierrelong:     "march\u00e9 de surface contr\u00f4l\u00e9 par les Sonneurs, les prix en dessous sont diff\u00e9rents",
+    le_puits:       "fa\u00e7ade commerciale, les vrais \u00e9changes se font dans les galeries",
+    hauts_plateaux: "troc entre tribus Agritans, les \u00e9trangers paient en objets utiles",
+    la_lisiere:     "march\u00e9 local modeste, les Sylvains ne commercent pas mais \u00e9changent parfois",
+    hamecon:        "poisson contre grain, peu de deniers circulent, \u00e9conomie de subsistance",
+    terre_balayee:  "c\u00e9r\u00e9ales et b\u00e9tail, l'empire prend sa part avant tout le monde",
+    marais_tortues: "les Foulards \u00e9changent entre eux, les \u00e9trangers n'ont rien \u00e0 offrir ici",
+  },
+};
+
 // --- MONDE G\u00c9N\u00c9RAL (toujours inject\u00e9 en profil \u00e9mergent+) ---
 
 export const MONDE = {
@@ -183,9 +211,18 @@ export function buildLoreCtx(heroLieu, heroPeuple, profil) {
   const key = lieuKey(heroLieu);
   const parts = [];
 
+  // \u00c9conomie locale
+  parts.push("\u00c9CONOMIE");
+  parts.push(ECONOMIE.monnaie);
+  parts.push("prix=[" + ECONOMIE.prix.survie + " | " + ECONOMIE.prix.equipement + "]");
+  parts.push("rare=[" + ECONOMIE.prix.rare + "]");
+  const ecoLocale = ECONOMIE.regions[key];
+  if (ecoLocale) parts.push("march\u00e9_local=" + ecoLocale);
+
   // Lore de la r\u00e9gion actuelle
   const regionLore = LORE_REGIONS[key];
   if (regionLore) {
+    parts.push("");
     parts.push("R\u00c9GION " + (regionLore.region || heroLieu));
     parts.push(regionLore.lore);
   }
