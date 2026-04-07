@@ -7,7 +7,7 @@ import Input from "./Input.jsx";
 export default function GameScreen({
   hero, prose, streaming, going, err, rateLimit,
   pendingDeath, deadHero,
-  onPlay, onQuit, onCancelQuit, onEndReve, onNewDream, onReset, onJournal,
+  onPlay, onPause, onAbandon, onCancelQuit, onEndReve, onNewDream, onReset, onJournal,
 }) {
   const scrollRef = useRef(null);
   const bottomRef = useRef(null);
@@ -43,18 +43,20 @@ export default function GameScreen({
             cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
           }}>{"journal"}</button>
           {!pendingDeath && !going && prose && (
-            <button type="button" onClick={onQuit} style={{
+            <button type="button" onClick={onPause} style={{
               background: "transparent", border: "1px solid " + C.dim,
               borderRadius: 3, padding: "4px 10px",
               color: C.muted, fontSize: 9, letterSpacing: 2,
               cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
-            }}>{"quitter"}</button>
+            }}>{"\u2190"}</button>
           )}
-          <button type="button" onClick={onReset} style={{
-            background: "transparent", border: "none",
-            color: C.dim, fontSize: 9, letterSpacing: 3,
-            cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
-          }}>{"···"}</button>
+          {!pendingDeath && !going && prose && (
+            <button type="button" onClick={onAbandon} style={{
+              background: "transparent", border: "none",
+              color: C.dim, fontSize: 9, letterSpacing: 3,
+              cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
+            }}>{"···"}</button>
+          )}
         </div>
       </div>
 
@@ -97,14 +99,16 @@ export default function GameScreen({
               {pendingDeath === "mort" ? "Continuer" : "Quitter"}
             </button>
             {pendingDeath === "abandon" && (
-              <button type="button" onClick={onCancelQuit} style={{
-                background: "transparent", border: "none",
-                color: C.muted, fontSize: 9, letterSpacing: 2,
-                textTransform: "uppercase", cursor: "pointer",
-                fontFamily: "inherit", display: "block", margin: "0.8rem auto 0",
-              }}>
-                {"rester dans le r\u00eave"}
-              </button>
+              <div>
+                <button type="button" onClick={onCancelQuit} style={{
+                  background: "transparent", border: "none",
+                  color: C.muted, fontSize: 9, letterSpacing: 2,
+                  textTransform: "uppercase", cursor: "pointer",
+                  fontFamily: "inherit", display: "block", margin: "0.8rem auto 0",
+                }}>
+                  {"rester dans le r\u00eave"}
+                </button>
+              </div>
             )}
           </div>
         )}
