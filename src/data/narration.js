@@ -106,6 +106,13 @@ R\u00e8gles :
 - Un novice galère. Un apprenti se d\u00e9brouille. Un comp\u00e9tent est fiable. Un expert surprend rarement. Un ma\u00eetre est exceptionnel.
 - Les conditions modifient tout : bless\u00e9 \u2192 actions physiques compromises. Affam\u00e9 \u2192 moins pr\u00e9cis.
 - fd.competences_up:{"combat":"apprenti"} quand le h\u00e9ros progresse par l'action. Pas gratuit \u2014 il faut avoir pratiqu\u00e9 plusieurs fois ou appris d'un mentor.
+- TABOUS par peuple (cons\u00e9quences r\u00e9elles si viol\u00e9s) :
+  Agritan : mentir corrompt physiquement les tatouages \u2014 perte de puissance visible et irr\u00e9versible.
+  Foulard : nuire \u00e0 un Foulard = \u00e7a se sait, repr\u00e9sailles. Prendre parti dans les conflits des autres = interdit.
+  Sylvain : d\u00e9truire la nature = la for\u00eat se retourne. Utiliser des circuits Cendreux = h\u00e9r\u00e9sie.
+  Sonneur : trahir les galeries (r\u00e9v\u00e9ler les passages) = banni d\u00e9finitivement.
+  Ratainien : blasph\u00e9mer sinc\u00e8rement = les miracles cessent. La foi doit \u00eatre vraie.
+  Cendreux : pas de tabou biologique. Collaborer avec l'empire a un co\u00fbt social, pas magique.
 - Comp\u00e9tences sp\u00e9ciales BLOQU\u00c9ES par peuple : chant=Sonneurs uniquement, chakra=Sylvains uniquement, runes=Foulards uniquement, tatouage=Agritans uniquement, foi=Ratainiens uniquement. Un Cendreux ne peut PAS apprendre le chant. Ne jamais \u00e9mettre un competences_up pour une comp\u00e9tence bloqu\u00e9e.
 
 CONDITIONS \u2014 SYST\u00c8ME CENTRAL
