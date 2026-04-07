@@ -117,9 +117,6 @@ export function buildCtx(hero, world, hist, intention) {
     if (dists) parts.push("distances=[" + dists + "]");
   }
 
-  const fils = (world.fils || []).slice(-4);
-  if (fils.length) parts.push("en_suspens=[" + fils.join(" | ") + "]");
-
   // Lieu physique
   if (region) {
     parts.push("");
@@ -356,11 +353,8 @@ export function applyLd(world, ld) {
     next.cles = cles;
   }
 
-  if (ld.en_suspens && ld.en_suspens.length)
-    next.fils = [...(world.fils || []), ...ld.en_suspens].slice(-10);
-
   if (ld.consequences && ld.consequences.length)
-    next.consequences = ld.consequences.slice(-5);
+    next.consequences = [...(world.consequences || []), ...ld.consequences].slice(-10);
 
   if (ld.meteo) next.meteo = ld.meteo;
 

@@ -127,8 +127,7 @@ ld : ce qui change dans le monde.
   }
   cles:{cle_id:true} \u2014 voir TABLE DES CL\u00c9S ci-dessous
   journal:{categorie:{id:"fragment"}} \u2014 voir JOURNAL ci-dessous
-  en_suspens:["cons\u00e9quence r\u00e9elle non r\u00e9solue"]
-  consequences:["ce que le monde retient de cette sc\u00e8ne \u2014 fait court, concret"]
+  consequences:["ce que le monde retient de cette sc\u00e8ne \u2014 fait court, concret. C'est la M\u00c9MOIRE NARRATIVE du monde. Toute promesse, dette, menace, d\u00e9couverte, relation chang\u00e9e doit y \u00eatre. Les consequences du CTX sont les fils narratifs actifs \u2014 les utiliser, les faire \u00e9voluer, les r\u00e9soudre."]
   meteo:"nuit tomb\u00e9e | pluie fine | grand froid"
 
 scene_state est CRUCIAL : c'est la disposition spatiale de la sc\u00e8ne. Mets \u00e0 jour scene_state \u00e0 chaque sc\u00e8ne o\u00f9 la disposition change : positions des PNJ, \u00e9tat des portes/objets, orientation du h\u00e9ros. Format court : "garde : entr\u00e9e nord, debout", "porte : ferm\u00e9e", "h\u00e9ros : face au comptoir".
