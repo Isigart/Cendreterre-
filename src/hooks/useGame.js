@@ -152,6 +152,34 @@ export default function useGame() {
   }
 
 
+  function handleTutoComplete(tutoResult) {
+    const h = heroRef.current;
+    if (!h) return;
+
+    // Appliquer les r\u00e9sultats du tuto
+    if (tutoResult.hasBarre) {
+      h.inventaire = [...(h.inventaire || []), "barre de fer courte"];
+    }
+
+    // Construire le contexte de sortie du tuto pour la premi\u00e8re sc\u00e8ne LLM
+    const tutoContext = {
+      combat: "premi\u00e8re sc\u00e8ne \u2014 le h\u00e9ros sort d'une cave. Il a frapp\u00e9 un fonctionnaire imp\u00e9rial pour s'\u00e9chapper. La garnison va s'en apercevoir. Il est dans une rue, dehors, quelque part pr\u00e8s de Hautcendre. Il a de l'avance mais pas ind\u00e9finiment.",
+      fuite: "premi\u00e8re sc\u00e8ne \u2014 le h\u00e9ros sort d'une cave en courant. Un coup de sifflet derri\u00e8re lui. Il est dans une rue, dehors, quelque part pr\u00e8s de Hautcendre. Quelqu'un l'a signal\u00e9.",
+      discretion: "premi\u00e8re sc\u00e8ne \u2014 le h\u00e9ros sort d'une cave sans \u00eatre vu. Personne ne sait qu'il \u00e9tait l\u00e0. Il est dans une rue, dehors, quelque part pr\u00e8s de Hautcendre. Il a le temps.",
+      dialogue: "premi\u00e8re sc\u00e8ne \u2014 le h\u00e9ros sort d'une cave. Un fonctionnaire imp\u00e9rial l'a laiss\u00e9 passer. Il est dans une rue, dehors, quelque part pr\u00e8s de Hautcendre. Pas d'alerte.",
+      autre: "premi\u00e8re sc\u00e8ne \u2014 le h\u00e9ros sort d'une cave de justesse. Des pas derri\u00e8re lui. Il est dans une rue, dehors, quelque part pr\u00e8s de Hautcendre. C'est serr\u00e9.",
+    };
+
+    h.lieu = "Hautcendre";
+    heroRef.current = h;
+    setHero(h);
+    saveHero(h);
+
+    const ouverture = tutoContext[tutoResult.scene3Type] || tutoContext.autre;
+    setScreen("jeu");
+    playScene(ouverture, "ouverture", false);
+  }
+
   function choisirPeuple(peuple) {
     setPendingPeuple(peuple);
     setScreen("creation_metier");
@@ -180,8 +208,14 @@ export default function useGame() {
     worldRef.current = { ...worldRef.current, journal: autoFillJournal(h, worldRef.current, {}) };
     await saveWorld(worldRef.current);
     setProse(""); setErr(null); setRateLimit(false);
-    setScreen("jeu");
-    playScene(OUVERTURE_SURVIE, "ouverture", false);
+    // Premier h\u00e9ros : tuto. Suivants : directement dans le monde.
+    const isFirst = !worldRef.current.legacy?.length && heroes.length <= 1;
+    if (isFirst) {
+      setScreen("tuto");
+    } else {
+      setScreen("jeu");
+      playScene(OUVERTURE_SURVIE, "ouverture", false);
+    }
   }
 
   async function playScene(intention, label, skipHist) {
@@ -380,6 +414,7 @@ export default function useGame() {
     handleIntro,
     switchHero,
     pauseHero,
+    handleTutoComplete,
     choisirPeuple,
     choisirMetier,
     confirmerHero,
