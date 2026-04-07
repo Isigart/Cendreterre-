@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { C } from "../styles/theme.js";
 
 export default function Input({ onPlay, going }) {
   const [val, setVal] = useState("");
-  const ref = useRef(null);
 
   function submit() {
     const t = val.trim();
@@ -12,14 +11,8 @@ export default function Input({ onPlay, going }) {
     onPlay(t);
   }
 
-  function handleFocus() {
-    setTimeout(() => {
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 300);
-  }
-
   return (
-    <div ref={ref} style={{
+    <div style={{
       borderTop: "1px solid " + C.dim,
       padding: "1rem 0 2rem",
       marginTop: "2rem",
@@ -29,7 +22,6 @@ export default function Input({ onPlay, going }) {
         value={val}
         onChange={e => setVal(e.target.value)}
         onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-        onFocus={handleFocus}
         placeholder="que fais-tu ?"
         rows={2}
         disabled={going}
