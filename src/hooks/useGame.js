@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { loadHero, loadHeroes, saveHero, saveHeroes, delHero, loadWorld, saveWorld, getPlayerCode, setPlayerCode, loadFromServer, getActiveHeroId, setActiveHeroId } from "../lib/storage.js";
-import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, applyTime, applyInactiveTime, buildLegacy, computeAutoCles, compressArc } from "../lib/game.js";
+import { initHero, randomHero, buildCtx, buildHint, applyFd, applyLd, applyTime, applyInactiveTime, buildLegacy, computeAutoCles, autoFillJournal, compressArc } from "../lib/game.js";
 import { computeNewUnlocks } from "../lib/unlocks.js";
 import { callLLM } from "../lib/api.js";
 import { validateFd, validateLd } from "../lib/validate.js";
@@ -155,6 +155,8 @@ export default function useGame() {
     setHero(h);
     setHeroes(prev => [...prev, h]);
     saveHero(h);
+    // Journal auto pour le lieu de d\u00e9part
+    worldRef.current = { ...worldRef.current, journal: autoFillJournal(h, worldRef.current, {}) };
     saveWorld(worldRef.current);
     setErr(null); setRateLimit(false);
     setScreen("jeu");
@@ -186,6 +188,8 @@ export default function useGame() {
     setHero(h);
     setHeroes(prev => [...prev, h]);
     await saveHero(h);
+    worldRef.current = { ...worldRef.current, journal: autoFillJournal(h, worldRef.current, {}) };
+    await saveWorld(worldRef.current);
     setProse(""); setErr(null); setRateLimit(false);
     setScreen("jeu");
     playScene(OUVERTURE_SURVIE, "ouverture", false);
@@ -231,6 +235,7 @@ export default function useGame() {
         let newWorld = applyLd(worldRef.current, ld);
         newWorld = applyTime(newWorld, fd);
         newWorld = { ...newWorld, cles: computeAutoCles(newHero, newWorld) };
+        newWorld.journal = autoFillJournal(newHero, newWorld, ld);
         newHero.lastActiveJour = newWorld.jour;
         worldRef.current = newWorld;
         setWorld(newWorld);

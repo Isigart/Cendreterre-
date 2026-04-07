@@ -295,6 +295,52 @@ export function applyFd(hero, fd) {
   return next;
 }
 
+export function autoFillJournal(hero, world, ld) {
+  const journal = { ...(world.journal || {}) };
+
+  // PNJ : chaque nouveau PNJ ou PNJ mis \u00e0 jour alimente le journal
+  if (ld.pnj) {
+    if (!journal.pnj) journal.pnj = {};
+    Object.entries(ld.pnj).forEach(([nom, data]) => {
+      const existing = journal.pnj[nom] || [];
+      // Premier contact : ajouter la description
+      if (data.description && !existing.some(f => f.includes(data.description.slice(0, 30)))) {
+        journal.pnj[nom] = [...existing, data.description].slice(-8);
+      }
+    });
+  }
+
+  // Lieux : quand le h\u00e9ros arrive dans un nouveau lieu
+  const key = lieuKey(hero.lieu);
+  if (!journal.lieux) journal.lieux = {};
+  if (!journal.lieux[key]) {
+    const region = LIEUX_BASE[key];
+    if (region) {
+      journal.lieux[key] = [region.physique.split(",").slice(0, 2).join(",") + "."];
+    }
+  }
+
+  // Peuples : d\u00e9tecter depuis les PNJ rencontr\u00e9s (via physique_peuples)
+  if (ld.pnj) {
+    if (!journal.peuples) journal.peuples = {};
+    Object.entries(ld.pnj).forEach(([nom, data]) => {
+      if (data.description) {
+        const desc = data.description.toLowerCase();
+        Object.entries(PHYSIQUE_PEUPLES).forEach(([peupleId, physique]) => {
+          // V\u00e9rifier si la description du PNJ correspond \u00e0 un peuple
+          const traits = physique.split(",").map(t => t.trim().split(" ")[0]);
+          const match = traits.some(t => t.length > 4 && desc.includes(t.toLowerCase()));
+          if (match && !journal.peuples[peupleId]) {
+            journal.peuples[peupleId] = ["Rencontr\u00e9 via " + nom + "."];
+          }
+        });
+      }
+    });
+  }
+
+  return journal;
+}
+
 export function computeAutoCles(hero, world) {
   const cles = { ...(world.cles || {}) };
   const visited = hero.lieuxVisites || [];
