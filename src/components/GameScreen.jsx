@@ -48,7 +48,7 @@ export default function GameScreen({
             color: C.muted, fontSize: 9, letterSpacing: 2,
             cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
           }}>{"journal"}</button>
-          {!pendingDeath && !going && prose && (
+          {!pendingDeath && !deadHero && (
             <button type="button" onClick={onAbandon} style={{
               background: "transparent", border: "none",
               color: C.dim, fontSize: 9, letterSpacing: 3,
