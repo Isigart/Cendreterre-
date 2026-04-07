@@ -1,7 +1,6 @@
 import "./styles/global.css";
 import { C } from "./styles/theme.js";
 import useGame from "./hooks/useGame.js";
-import PremierReve from "./components/PremierReve.jsx";
 import IntroScreen from "./components/IntroScreen.jsx";
 import PeupleScreen from "./components/PeupleScreen.jsx";
 import MetierScreen from "./components/MetierScreen.jsx";
@@ -28,11 +27,7 @@ export default function App() {
       )}
 
       {game.screen === "regles" && (
-        <ReglesScreen onContinue={() => game.setScreen("premier_reve")} />
-      )}
-
-      {game.screen === "premier_reve" && (
-        <PremierReve onNom={game.handlePremierNom} />
+        <ReglesScreen onContinue={() => game.setScreen("intro")} />
       )}
 
       {game.screen === "intro" && (

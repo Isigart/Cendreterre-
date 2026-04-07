@@ -57,7 +57,7 @@ export default function IntroScreen({ onCommencer, heroes, onSwitch }) {
             cursor: "pointer", fontFamily: "inherit",
             display: "block", width: "100%",
           }}>
-            {livingHeroes.length > 0 ? "Nouveau r\u00eave" : "Choisir un r\u00eave"}
+            {livingHeroes.length > 0 ? "Nouvelle histoire" : "Commencer une histoire"}
           </button>
         )}
 

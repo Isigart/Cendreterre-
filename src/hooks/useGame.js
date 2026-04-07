@@ -136,34 +136,21 @@ export default function useGame() {
       setScreen("jeu");
       setProse(buildResumeProse(heroRef.current));
     } else {
-      setScreen("creation_peuple");
+      const cles = worldRef.current.cles || {};
+      const hasCles = Object.keys(cles).some(k => cles[k]);
+      const hasLegacy = (worldRef.current.legacy || []).length > 0;
+      if (!hasCles && !hasLegacy) {
+        // Premier h\u00e9ros : Cendreux sans m\u00e9tier, directement au nom
+        const cendreux = PEUPLES.find(p => p.id === "cendreux");
+        setPendingPeuple(cendreux);
+        setPendingMetier(null);
+        setScreen("creation_nom");
+      } else {
+        setScreen("creation_peuple");
+      }
     }
   }
 
-  function handlePremierNom(nom) {
-    const peuple = PEUPLES.find(p => p.id === "cendreux");
-    setPendingPeuple(peuple);
-    setPendingMetier(null);
-    const h = initHero(peuple, null, nom, null);
-    h.id = "hero_" + Date.now();
-    h.clesDepart = { ...worldRef.current.cles };
-    h.lastActiveJour = worldRef.current.jour || 1;
-    // Init world time si premier h\u00e9ros
-    if (!worldRef.current.jour) {
-      worldRef.current = { ...worldRef.current, jour: 1, moment: "matin" };
-    }
-    heroRef.current = h;
-    histRef.current = [];
-    setHero(h);
-    setHeroes(prev => [...prev, h]);
-    saveHero(h);
-    // Journal auto pour le lieu de d\u00e9part
-    worldRef.current = { ...worldRef.current, journal: autoFillJournal(h, worldRef.current, {}) };
-    saveWorld(worldRef.current);
-    setErr(null); setRateLimit(false);
-    setScreen("jeu");
-    playScene(OUVERTURE_SURVIE, "ouverture", false);
-  }
 
   function choisirPeuple(peuple) {
     setPendingPeuple(peuple);
@@ -393,7 +380,6 @@ export default function useGame() {
     handleIntro,
     switchHero,
     pauseHero,
-    handlePremierNom,
     choisirPeuple,
     choisirMetier,
     confirmerHero,
