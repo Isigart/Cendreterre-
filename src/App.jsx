@@ -80,7 +80,8 @@ export default function App() {
           pendingDeath={game.pendingDeath}
           deadHero={game.deadHero}
           onPlay={game.playScene}
-          onQuit={() => game.setPendingDeath("abandon")}
+          onPause={game.pauseHero}
+          onAbandon={() => game.setPendingDeath("abandon")}
           onCancelQuit={() => game.setPendingDeath(null)}
           onEndReve={game.handleEndReve}
           onNewDream={() => { game.setDeadHero(null); game.setProse(""); game.setScreen("intro"); }}

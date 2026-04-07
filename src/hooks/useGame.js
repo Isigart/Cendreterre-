@@ -286,6 +286,20 @@ export default function useGame() {
     }
   }
 
+  // Mettre le h\u00e9ros en pause et retourner \u00e0 l'intro
+  async function pauseHero() {
+    if (heroRef.current) {
+      heroRef.current.lastActiveJour = worldRef.current.jour || 1;
+      await saveHero(heroRef.current);
+    }
+    lastProseRef.current = null;
+    setProse("");
+    setPendingDeath(null);
+    setDeadHero(null);
+    setErr(null);
+    setScreen("intro");
+  }
+
   async function switchHero(heroId) {
     // Sauvegarder le h\u00e9ros actuel
     if (heroRef.current) {
@@ -371,6 +385,7 @@ export default function useGame() {
     handleCode,
     handleIntro,
     switchHero,
+    pauseHero,
     handlePremierNom,
     choisirPeuple,
     choisirMetier,
