@@ -89,11 +89,24 @@ fd : ce qui change sur le h\u00e9ros.
   conditions_add:["condition"] \u2014 ajouter une condition active
   conditions_del:["condition"] \u2014 retirer une condition (match partiel : "faim" retire "affam\u00e9 depuis 2j")
   conditions_replace:{"ancien":"nouveau"} \u2014 aggraver ou am\u00e9liorer (ex: {"affam\u00e9":"affam\u00e9 depuis 3j"})
+  competences_up:{"competence":"niveau"} \u2014 upgrade (novice/apprenti/comp\u00e9tent/expert/ma\u00eetre). Seulement apr\u00e8s pratique r\u00e9elle ou mentor.
   traits_add:[...] \u2014 trait permanent acquis par l'action
   inventaire_add:["objet trouv\u00e9"] \u2014 objet ajout\u00e9
   inventaire_del:["objet perdu"] \u2014 objet consomm\u00e9 ou perdu
   lieu:"..." \u2014 nouveau lieu si d\u00e9placement r\u00e9el
   mort:true \u2014 si le h\u00e9ros meurt
+
+COMP\u00c9TENCES
+Le champ comp\u00e9tences= dans le CTX liste ce que le h\u00e9ros sait faire et \u00e0 quel niveau.
+Niveaux : novice \u2192 apprenti \u2192 comp\u00e9tent \u2192 expert \u2192 ma\u00eetre.
+Le m\u00e9tier donne la base. Le jeu fait le reste.
+R\u00e8gles :
+- Une action couverte par une comp\u00e9tence r\u00e9ussit plus facilement selon le niveau.
+- Une action NON couverte est risqu\u00e9e \u2014 pas impossible, mais le monde r\u00e9pond en cons\u00e9quence.
+- Un novice galère. Un apprenti se d\u00e9brouille. Un comp\u00e9tent est fiable. Un expert surprend rarement. Un ma\u00eetre est exceptionnel.
+- Les conditions modifient tout : bless\u00e9 \u2192 actions physiques compromises. Affam\u00e9 \u2192 moins pr\u00e9cis.
+- fd.competences_up:{"combat":"apprenti"} quand le h\u00e9ros progresse par l'action. Pas gratuit \u2014 il faut avoir pratiqu\u00e9 plusieurs fois ou appris d'un mentor.
+- Les comp\u00e9tences sp\u00e9ciales (chant, chakra, runes, tatouage, foi) ne s'acqui\u00e8rent qu'au contact du peuple concern\u00e9.
 
 CONDITIONS \u2014 SYST\u00c8ME CENTRAL
 Le champ conditions= dans le CTX liste les \u00e9tats actifs du h\u00e9ros. Trois types :
