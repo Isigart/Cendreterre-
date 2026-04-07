@@ -19,7 +19,7 @@ export default function JournalScreen({ journal, onBack }) {
 
   // Vue cat\u00e9gories
   if (!activeCat) return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid " + C.dim, flexShrink: 0 }}>
         <button type="button" onClick={onBack} style={{
           background: "transparent", border: "none", color: C.muted,
@@ -65,7 +65,7 @@ export default function JournalScreen({ journal, onBack }) {
 
   // Vue entr\u00e9es d'une cat\u00e9gorie
   if (!activeEntry) return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid " + C.dim, flexShrink: 0 }}>
         <button type="button" onClick={() => setActiveCat(null)} style={{
           background: "transparent", border: "none", color: C.muted,
@@ -103,7 +103,7 @@ export default function JournalScreen({ journal, onBack }) {
   // Vue d\u00e9tail d'une entr\u00e9e
   const fragments = Array.isArray(catData[activeEntry]) ? catData[activeEntry] : [catData[activeEntry]];
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid " + C.dim, flexShrink: 0 }}>
         <button type="button" onClick={() => setActiveEntry(null)} style={{
           background: "transparent", border: "none", color: C.muted,

@@ -20,7 +20,7 @@ export default function GameScreen({
   }, [prose, streaming]);
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
+    <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
 
       {/* Header */}
       <div style={{
