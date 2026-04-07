@@ -12,10 +12,10 @@ export default function GameScreen({
   const scrollRef = useRef(null);
   const bottomRef = useRef(null);
 
-  // Auto-scroll pendant le streaming
+  // Auto-scroll quand le contenu change
   useEffect(() => {
-    if (streaming && bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    if (prose && scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [prose, streaming]);
 
