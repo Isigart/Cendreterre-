@@ -2,6 +2,7 @@ import { LIEUX_BASE, PHYSIQUE_PEUPLES, lieuKey, getDistances } from "../data/lie
 import { PROFIL_DIRECTIVE, profilNarratif } from "../data/narration.js";
 import { PEUPLES, METIERS } from "../data/peuples.js";
 import { randomPrenom } from "../data/prenoms.js";
+import { getCompetencesInitiales, NIVEAUX } from "../data/competences.js";
 import { buildLoreCtx } from "../data/lore.js";
 import { buildPnjCtx } from "../data/pnj.js";
 import { buildArcsCtx, buildClesCtx } from "../data/arcs.js";
@@ -18,6 +19,7 @@ export function initHero(peuple, metier, nom, genre) {
     lieuxVisites: [lieuKey(lieu)],
     lastActiveJour: null,
     arcs: [],
+    competences: getCompetencesInitiales(metier?.id),
     conditions: metier ? ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re"] : ["faim l\u00e9g\u00e8re", "soif l\u00e9g\u00e8re", "d\u00e9sorient\u00e9"],
     traits: {
       public:  [],
@@ -66,6 +68,11 @@ export function buildCtx(hero, world, hist, intention) {
   }
   if (hero.inventaire && hero.inventaire.length)
     parts.push("inventaire=[" + hero.inventaire.join(", ") + "]");
+  const comps = hero.competences || {};
+  const compEntries = Object.entries(comps);
+  if (compEntries.length) {
+    parts.push("comp\u00e9tences=[" + compEntries.map(([k, v]) => k + ":" + v).join(", ") + "]");
+  }
   if (hero.traits.acquis && hero.traits.acquis.length)
     parts.push("acquis=[" + hero.traits.acquis.join(", ") + "]");
 
@@ -279,6 +286,20 @@ export function applyFd(hero, fd) {
       else conds.push(nouveau);
     });
     next.conditions = conds;
+  }
+
+  // Comp\u00e9tences : upgrade uniquement (pas de downgrade)
+  if (fd.competences_up && typeof fd.competences_up === "object") {
+    const comps = { ...(hero.competences || {}) };
+    Object.entries(fd.competences_up).forEach(([skill, level]) => {
+      if (typeof skill !== "string" || typeof level !== "string") return;
+      const newIdx = NIVEAUX.indexOf(level);
+      if (newIdx < 0) return;
+      const current = comps[skill];
+      const curIdx = current ? NIVEAUX.indexOf(current) : -1;
+      if (newIdx > curIdx) comps[skill] = level;
+    });
+    next.competences = comps;
   }
 
   if (fd.inventaire_add && fd.inventaire_add.length) {

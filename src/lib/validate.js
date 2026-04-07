@@ -1,6 +1,8 @@
 import { LIEUX_BASE, lieuKey } from "../data/lieux.js";
+import { NIVEAUX } from "../data/competences.js";
 
 const MOMENTS_VALIDES = ["aube", "matin", "midi", "apres-midi", "soir", "nuit"];
+const COMPETENCES_VALIDES = ["combat", "discretion", "endurance", "agilite", "survie", "artisanat", "circuits", "medecine", "persuasion", "observation", "commerce", "chant", "chakra", "runes", "tatouage", "foi"];
 
 export function validateFd(fd) {
   if (!fd || typeof fd !== "object") return {};
@@ -51,6 +53,18 @@ export function validateFd(fd) {
   }
   if (fd.inventaire_del && Array.isArray(fd.inventaire_del)) {
     clean.inventaire_del = fd.inventaire_del.filter(o => typeof o === "string");
+  }
+
+  // comp\u00e9tences
+  if (fd.competences_up && typeof fd.competences_up === "object" && !Array.isArray(fd.competences_up)) {
+    const cu = {};
+    Object.entries(fd.competences_up).forEach(([skill, level]) => {
+      const normSkill = skill.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (COMPETENCES_VALIDES.includes(normSkill) && NIVEAUX.includes(level)) {
+        cu[normSkill] = level;
+      }
+    });
+    if (Object.keys(cu).length) clean.competences_up = cu;
   }
 
   // mort
