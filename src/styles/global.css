@@ -26,6 +26,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  position: relative;
 }
 
 @keyframes pulse    { 0%,100%{opacity:.3} 50%{opacity:1} }

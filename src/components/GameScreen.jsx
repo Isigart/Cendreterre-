@@ -20,14 +20,15 @@ export default function GameScreen({
   }, [prose, streaming]);
 
   return (
-    <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", width: "100%", maxWidth: "100vw", boxSizing: "border-box", position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
 
       {/* Header */}
       <div style={{
         borderBottom: "1px solid " + C.dim,
-        padding: "0.8rem 1rem",
+        padding: "0.6rem 0.8rem",
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexShrink: 0, boxSizing: "border-box", width: "100%",
+        background: C.bg, zIndex: 10,
       }}>
         <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, minWidth: 0 }}>
           <span style={{ fontSize: 13, color: C.accent, fontStyle: "italic" }}>{hero?.nom}</span>

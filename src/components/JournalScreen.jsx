@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C } from "../styles/theme.js";
+import { DISTANCES, lieuKey } from "../data/lieux.js";
 
 const CATEGORIES = [
   { id: "lieux",       nom: "Lieux" },
@@ -11,7 +12,18 @@ const CATEGORIES = [
   { id: "monde",       nom: "Le Monde" },
 ];
 
-export default function JournalScreen({ journal, onBack }) {
+function getDistanceInfo(heroLieu, targetLieu) {
+  const fromKey = lieuKey(heroLieu);
+  const toKey = lieuKey(targetLieu);
+  if (fromKey === toKey) return { jours: 0, cap: "ici" };
+  const dists = DISTANCES[fromKey];
+  if (!dists || !dists[toKey]) return null;
+  const d = dists[toKey];
+  const cap = d.note.split(",")[0].trim();
+  return { jours: d.j, cap };
+}
+
+export default function JournalScreen({ journal, heroLieu, onBack }) {
   const [activeCat, setActiveCat] = useState(null);
   const [activeEntry, setActiveEntry] = useState(null);
 
@@ -62,6 +74,7 @@ export default function JournalScreen({ journal, onBack }) {
 
   const catData = data[activeCat] || {};
   const catNom = CATEGORIES.find(c => c.id === activeCat)?.nom || activeCat;
+  const isLieux = activeCat === "lieux";
 
   // Vue entr\u00e9es d'une cat\u00e9gorie
   if (!activeEntry) return (
@@ -74,34 +87,49 @@ export default function JournalScreen({ journal, onBack }) {
         }}>{"\u2190 " + catNom}</button>
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem 1.5rem", maxWidth: 500, margin: "0 auto", width: "100%" }}>
-        {Object.entries(catData).map(([id, fragments]) => (
-          <button key={id} type="button"
-            onClick={() => setActiveEntry(id)}
-            style={{
-              background: "transparent", border: "1px solid " + C.dim,
-              borderRadius: 3, padding: "0.7rem 1rem",
-              display: "block", width: "100%", textAlign: "left",
-              marginBottom: "0.5rem", cursor: "pointer",
-              fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
-              transition: "border-color .15s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
-            onMouseLeave={e => e.currentTarget.style.borderColor = C.dim}
-          >
-            <span style={{ fontSize: 13, color: C.accent, fontStyle: "italic" }}>
-              {id.replace(/_/g, " ")}
-            </span>
-            <span style={{ fontSize: 10, color: C.dim, marginLeft: 8 }}>
-              {Array.isArray(fragments) ? fragments.length + " fragment" + (fragments.length > 1 ? "s" : "") : "1 fragment"}
-            </span>
-          </button>
-        ))}
+        {Object.entries(catData).map(([id, fragments]) => {
+          const dist = isLieux ? getDistanceInfo(heroLieu, id) : null;
+          return (
+            <button key={id} type="button"
+              onClick={() => setActiveEntry(id)}
+              style={{
+                background: "transparent", border: "1px solid " + C.dim,
+                borderRadius: 3, padding: "0.7rem 1rem",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                width: "100%", textAlign: "left",
+                marginBottom: "0.5rem", cursor: "pointer",
+                fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
+                transition: "border-color .15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
+              onMouseLeave={e => e.currentTarget.style.borderColor = C.dim}
+            >
+              <div>
+                <span style={{ fontSize: 13, color: C.accent, fontStyle: "italic" }}>
+                  {id.replace(/_/g, " ")}
+                </span>
+                {!isLieux && (
+                  <span style={{ fontSize: 10, color: C.dim, marginLeft: 8 }}>
+                    {Array.isArray(fragments) ? fragments.length + " fragment" + (fragments.length > 1 ? "s" : "") : "1 fragment"}
+                  </span>
+                )}
+              </div>
+              {isLieux && dist && (
+                <span style={{ fontSize: 10, color: dist.jours === 0 ? C.accent : C.muted, flexShrink: 0, marginLeft: 8, textAlign: "right" }}>
+                  {dist.jours === 0 ? "ici" : dist.jours + "j \u00b7 " + dist.cap}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 
   // Vue d\u00e9tail d'une entr\u00e9e
   const fragments = Array.isArray(catData[activeEntry]) ? catData[activeEntry] : [catData[activeEntry]];
+  const detailDist = isLieux ? getDistanceInfo(heroLieu, activeEntry) : null;
+
   return (
     <div style={{ height: "100dvh", minHeight: "-webkit-fill-available", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid " + C.dim, flexShrink: 0 }}>
@@ -112,8 +140,15 @@ export default function JournalScreen({ journal, onBack }) {
         }}>{"\u2190 " + catNom}</button>
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "2rem 1.5rem", maxWidth: 500, margin: "0 auto", width: "100%" }}>
-        <div style={{ fontSize: 18, color: C.accent, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif", marginBottom: "1.5rem" }}>
-          {activeEntry.replace(/_/g, " ")}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.5rem" }}>
+          <div style={{ fontSize: 18, color: C.accent, fontStyle: "italic", fontFamily: "'Palatino Linotype', Palatino, Georgia, serif" }}>
+            {activeEntry.replace(/_/g, " ")}
+          </div>
+          {isLieux && detailDist && (
+            <span style={{ fontSize: 11, color: detailDist.jours === 0 ? C.accent : C.muted }}>
+              {detailDist.jours === 0 ? "Tu es ici" : detailDist.jours + " jours \u00b7 " + detailDist.cap}
+            </span>
+          )}
         </div>
         {fragments.filter(Boolean).map((f, i) => (
           <p key={i} style={{

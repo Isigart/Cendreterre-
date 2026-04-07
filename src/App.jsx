@@ -66,7 +66,7 @@ export default function App() {
       )}
 
       {game.screen === "journal" && (
-        <JournalScreen journal={game.worldRef.current.journal} onBack={() => game.setScreen("jeu")} />
+        <JournalScreen journal={game.worldRef.current.journal} heroLieu={game.hero?.lieu} onBack={() => game.setScreen("jeu")} />
       )}
 
       {game.screen === "jeu" && (
