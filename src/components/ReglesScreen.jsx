@@ -26,6 +26,13 @@ export default function ReglesScreen({ onContinue }) {
           }}>
             {"Le monde se souvient \u2014 ce que tu fais compte. Les PNJ bougent, les lieux changent, les cons\u00e9quences arrivent plus tard."}
           </p>
+          <p style={{
+            fontSize: 14, color: C.text, lineHeight: 2.2,
+            fontFamily: "'Palatino Linotype', Palatino, Georgia, serif",
+            fontStyle: "italic",
+          }}>
+            {"Ton journal de bord se remplit au fil du jeu \u2014 pense \u00e0 le consulter."}
+          </p>
         </div>
         <button type="button" onClick={onContinue} style={{
           background: "transparent", border: "1px solid " + C.accent,
