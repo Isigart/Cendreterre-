@@ -35,21 +35,19 @@ export default function GameScreen({
             {hero?.peuple?.nom}{hero?.metier?.nom ? ` · ${hero.metier.nom}` : ""}{` · ${hero?.lieu || ""}`}
           </span>
         </div>
-        <div style={{ display: "flex", gap: "0.6rem", alignItems: "center", flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexShrink: 0 }}>
+          <button type="button" onClick={onPause} style={{
+            background: "transparent", border: "1px solid " + C.dim,
+            borderRadius: 3, padding: "4px 8px",
+            color: C.muted, fontSize: 9, letterSpacing: 2,
+            cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
+          }}>{"\u2190"}</button>
           <button type="button" onClick={onJournal} style={{
             background: "transparent", border: "1px solid " + C.dim,
-            borderRadius: 3, padding: "4px 10px",
+            borderRadius: 3, padding: "4px 8px",
             color: C.muted, fontSize: 9, letterSpacing: 2,
             cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
           }}>{"journal"}</button>
-          {!pendingDeath && !going && prose && (
-            <button type="button" onClick={onPause} style={{
-              background: "transparent", border: "1px solid " + C.dim,
-              borderRadius: 3, padding: "4px 10px",
-              color: C.muted, fontSize: 9, letterSpacing: 2,
-              cursor: "pointer", fontFamily: "inherit", textTransform: "uppercase",
-            }}>{"\u2190"}</button>
-          )}
           {!pendingDeath && !going && prose && (
             <button type="button" onClick={onAbandon} style={{
               background: "transparent", border: "none",
