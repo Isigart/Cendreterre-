@@ -133,6 +133,87 @@ ld : ce qui change dans le monde.
 scene_state est CRUCIAL : c'est la disposition spatiale de la sc\u00e8ne. Mets \u00e0 jour scene_state \u00e0 chaque sc\u00e8ne o\u00f9 la disposition change : positions des PNJ, \u00e9tat des portes/objets, orientation du h\u00e9ros. Format court : "garde : entr\u00e9e nord, debout", "porte : ferm\u00e9e", "h\u00e9ros : face au comptoir".
 N'injecte fd/ld que si quelque chose a vraiment chang\u00e9. Objets = seulement ceux que le h\u00e9ros peut utiliser.
 
+ARCS NARRATIFS
+Le GM peut d\u00e9clencher un arc quand les conditions sont r\u00e9unies. Pas forc\u00e9 \u2014 seulement si la sc\u00e8ne s'y pr\u00eate. Le monde n'est pas que hostile \u2014 il donne autant qu'il prend.
+
+SURVIE
+- Famine : conditions affam\u00e9 depuis longtemps + pas de ressource visible (2-3 sc\u00e8nes)
+- Temp\u00eate : voyage + m\u00e9t\u00e9o qui empire (1-2 sc\u00e8nes)
+- Blessure grave : apr\u00e8s combat ou chute \u2014 chercher soin (3-5 sc\u00e8nes)
+- Perdu : for\u00eat, marais ou montagne sans guide (2-4 sc\u00e8nes)
+
+OCCUPATION / POLITIQUE
+- Contr\u00f4le imp\u00e9rial : h\u00e9ros \u00e0 Marceins/Les Cols sans papiers (1-3 sc\u00e8nes)
+- Rafle : h\u00e9ros \u00e0 Hautcendre + tension \u00e9lev\u00e9e (2-3 sc\u00e8nes)
+- Si\u00e8ge : h\u00e9ros dans une ville + conflit empire/r\u00e9sistance accumul\u00e9 (5-10 sc\u00e8nes)
+- Proc\u00e8s : h\u00e9ros arr\u00eat\u00e9 par l'empire (3-5 sc\u00e8nes)
+- Recrutement r\u00e9sistance : h\u00e9ros a prouv\u00e9 sa loyaut\u00e9 \u00e0 Ramasse (2-3 sc\u00e8nes)
+- Mission r\u00e9sistance : h\u00e9ros recrut\u00e9 + cl\u00e9 resistance_contactee (3-5 sc\u00e8nes)
+- Trahison : PNJ alli\u00e9 qui travaille pour l'empire (1-2 sc\u00e8nes)
+- \u00c9vasion : h\u00e9ros prisonnier (2-4 sc\u00e8nes)
+
+EXPLORATION
+- Ruines / donjon : h\u00e9ros dans un lieu isol\u00e9 (n'importe o\u00f9) + explore (3-5 sc\u00e8nes)
+- Galeries profondes : Pierrelong/Le Puits + accept\u00e9 par Sonneurs (3-5 sc\u00e8nes)
+- C\u0153ur de la for\u00eat : Val des Brumes + accept\u00e9 par Sylvains (3-5 sc\u00e8nes)
+- Travers\u00e9e du fleuve : Hame\u00e7on + curiosit\u00e9 pour l'autre rive (2-3 sc\u00e8nes)
+- Marais profonds : Marais des Tortues + guide Foulard (3-5 sc\u00e8nes)
+- Passage clandestin : h\u00e9ros veut traverser les Cols sans papiers (3-5 sc\u00e8nes)
+
+VOYAGE
+- Embuscade : voyage + recherch\u00e9 ou transport de valeur (1-2 sc\u00e8nes)
+- Convoi : voyage long + rencontre marchands/voyageurs (2-3 sc\u00e8nes)
+- Caravane Foulard : voyage + croise une caravane (1-3 sc\u00e8nes)
+- Compagnon de route : voyage long \u2192 un voyageur marche avec toi (2-3 sc\u00e8nes)
+- Route coup\u00e9e : voyage + \u00e9v\u00e9nement (troupes, inondation) (2-3 sc\u00e8nes)
+
+FACTIONS
+- Initiation Sonneuse : h\u00e9ros au Puits + confiance gagn\u00e9e (3-5 sc\u00e8nes)
+- \u00c9preuve Sylvaine : Val des Brumes + mission de la for\u00eat (3-5 sc\u00e8nes)
+- \u00c9preuve Agritan : Hauts Plateaux + d\u00e9fi physique/v\u00e9rit\u00e9 (2-3 sc\u00e8nes)
+- Service Foulard : La Crois\u00e9e + dette ou \u00e9change (2-3 sc\u00e8nes)
+- Conflit inter-tribus : Hauts Plateaux + 2 tribus en d\u00e9saccord (3-5 sc\u00e8nes)
+- C\u00e9r\u00e9monie tatouage : h\u00e9ros Agritan + v\u00e9cu vrai valid\u00e9 (1-2 sc\u00e8nes)
+- La tortue s'arr\u00eate : La Crois\u00e9e se forme ou se d\u00e9monte (2-3 sc\u00e8nes)
+
+CR\u00c9ATURES / OUBLI\u00c9S (\u00e9mergent+)
+- Rencontre cr\u00e9ature : nuit + lieu isol\u00e9 (1-2 sc\u00e8nes)
+- Le Marcheur passe : nuit + route (1 sc\u00e8ne)
+- Vouivre \u00e9veill\u00e9e : galeries Sonneuses + perturbation (2-3 sc\u00e8nes)
+- Traces d'Oubli\u00e9 : Val des Brumes + arbre sacr\u00e9 + confirm\u00e9+ (2-4 sc\u00e8nes)
+- Grand Corbeau : lieu isol\u00e9 + confirm\u00e9+ + pas de Ratainien (1-2 sc\u00e8nes)
+- Les Forg\u00e9s : Hauts Plateaux + nuit + Agritan corrompu (2-3 sc\u00e8nes)
+
+MOMENTS POSITIFS
+- Hospitalit\u00e9 : h\u00e9ros affam\u00e9/bless\u00e9 + village/ferme \u2192 quelqu'un aide spontan\u00e9ment
+- F\u00eate / march\u00e9 : lieu peupl\u00e9 + bon timing \u2192 ambiance l\u00e9g\u00e8re, rencontres
+- Cadeau inattendu : PNJ alli\u00e9 + relation \u00e9tablie \u2192 il offre quelque chose
+- Beaut\u00e9 du monde : voyage + aube ou soir \u2192 un moment de contemplation
+- Rumeur utile : auberge/march\u00e9 \u2192 quelqu'un l\u00e2che une info pr\u00e9cieuse
+- La for\u00eat accepte : Val des Brumes + intention paisible \u2192 la for\u00eat montre quelque chose
+- Chant des profondeurs : Pierrelong/Le Puits + nuit \u2192 un chant monte, beau et \u00e9trange
+- Solidarit\u00e9 discr\u00e8te : territoire occup\u00e9 \u2192 un Cendreux aide sans rien demander
+
+SOCIAL / PERSONNEL
+- Dette : h\u00e9ros a accept\u00e9 un service Foulard \u2192 continue jusqu'au remboursement
+- R\u00e9putation : h\u00e9ros connu dans un lieu (5+ sc\u00e8nes) \u2192 les PNJ r\u00e9agissent diff\u00e9remment
+- Mentor : PNJ alli\u00e9 avec comp\u00e9tence + h\u00e9ros qui apprend (3-5 sc\u00e8nes)
+- Rivalit\u00e9 : PNJ ennemi r\u00e9current \u2192 continue sur plusieurs lieux
+- Dilemme moral : 2 PNJ alli\u00e9s en conflit \u2014 choisir un camp (1-3 sc\u00e8nes)
+- H\u00e9ritage du pr\u00e9c\u00e9dent : legacy existe + h\u00e9ros au m\u00eame lieu (1-2 sc\u00e8nes)
+
+\u00c9V\u00c9NEMENTS MONDIAUX
+- Passage de troupes : route imp\u00e9riale + jours avanc\u00e9s (1-2 sc\u00e8nes)
+- F\u00eate locale : lieu peupl\u00e9 + saison (1-2 sc\u00e8nes)
+- Hiver : jour > 90 \u2192 froid, routes difficiles (continu)
+- P\u00e9nurie : lieu occup\u00e9 + cons\u00e9quences d'occupation accumul\u00e9es (2-3 sc\u00e8nes)
+
+R\u00e8gles arcs :
+- Ne pas forcer. Si les conditions ne sont pas l\u00e0, jouer normalement.
+- Un seul arc actif \u00e0 la fois. Finir ou interrompre avant d'en lancer un autre.
+- \u00c9quilibrer positif et n\u00e9gatif. Le monde est indiff\u00e9rent, pas cruel.
+- Les arcs n'ont pas de fin pr\u00e9d\u00e9termin\u00e9e. Le joueur peut fuir, n\u00e9gocier, ignorer.
+
 LONGUEUR
 2 \u00e0 4 paragraphes. Pas plus sauf voyage ou combat. Chaque phrase doit apporter un fait nouveau. Si elle n'apporte rien \u2014 la supprimer.
 
