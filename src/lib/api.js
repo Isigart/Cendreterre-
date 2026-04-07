@@ -49,33 +49,43 @@ export async function callLLM(ctx, intention, onChunk, lastProse) {
     buffer = lines.pop() || "";
 
     for (const line of lines) {
-      if (!line.startsWith("data: ")) continue;
-      const payload = line.slice(6);
-      if (payload === "[DONE]") continue;
+      processLine(line);
+    }
+  }
 
-      let event;
-      try { event = JSON.parse(payload); } catch { continue; }
+  // Traiter le buffer restant
+  if (buffer.trim()) processLine(buffer);
 
-      if (event.type === "content_block_delta" && event.delta?.text) {
-        full += event.delta.text;
-        // Stream prose in real-time (only the part before ///DATA)
-        const proseEnd = full.indexOf("///DATA");
-        const visibleText = proseEnd >= 0 ? full.slice(0, proseEnd) : full;
-        let prose = visibleText;
-        if (prose.includes("///PROSE")) {
-          let after = prose.split("///PROSE")[1] || "";
-          if (after.startsWith("\n")) after = after.slice(1);
-          const stop = after.indexOf("///");
-          prose = stop >= 0 ? after.slice(0, stop).trimStart() : after.trimStart();
-        }
-        onChunk(prose);
+  function processLine(line) {
+    if (!line.startsWith("data: ")) return;
+    const payload = line.slice(6);
+    if (payload === "[DONE]") return;
+
+    let event;
+    try { event = JSON.parse(payload); } catch { return; }
+
+    if (event.type === "content_block_delta" && event.delta?.text) {
+      full += event.delta.text;
+      // Stream prose in real-time (stop before ///DATA)
+      const dataStart = full.indexOf("///DATA");
+      const visibleText = dataStart >= 0 ? full.slice(0, dataStart) : full;
+      // Retirer le marqueur ///PROSE du d\u00e9but
+      let prose = visibleText;
+      const proseStart = prose.indexOf("///PROSE");
+      if (proseStart >= 0) {
+        prose = prose.slice(proseStart + 8);
+        if (prose.startsWith("\n")) prose = prose.slice(1);
       }
+      // Retirer le /// de fermeture s'il est \u00e0 la toute fin
+      if (prose.endsWith("///")) prose = prose.slice(0, -3);
+      else if (prose.endsWith("//")) prose = prose.slice(0, -2);
+      onChunk(prose.trim());
+    }
 
-      if (event.type === "error") {
-        const t = event.error?.type || "";
-        if (t === "rate_limit_error" || t === "overloaded_error") throw new Error("RATE_LIMIT");
-        throw new Error(event.error?.message || "Stream error");
-      }
+    if (event.type === "error") {
+      const t = event.error?.type || "";
+      if (t === "rate_limit_error" || t === "overloaded_error") throw new Error("RATE_LIMIT");
+      throw new Error(event.error?.message || "Stream error");
     }
   }
 
