@@ -12,22 +12,6 @@ const EMPTY_WORLD = { pnj: {}, objets: {}, fils: [], lieux: {}, cles: {}, legacy
 
 function buildResumeProse(hero) {
   const parts = [];
-  parts.push("Le r\u00eave reprend.\n");
-
-  // O\u00f9 et quand
-  parts.push("Tu es \u00e0 " + (hero.lieu || "quelque part") + ". Jour " + (hero.jour || 1) + ", " + (hero.moment || "matin") + ".");
-
-  // Conditions actives
-  const conds = hero.conditions || [];
-  if (conds.length) {
-    parts.push("Tu ressens : " + conds.join(", ") + ".");
-  }
-
-  // Inventaire
-  const inv = hero.inventaire || [];
-  if (inv.length) {
-    parts.push("Sur toi : " + inv.join(", ") + ".");
-  }
 
   // Dernier souvenir
   const hist = hero.hist || [];
@@ -40,9 +24,11 @@ function buildResumeProse(hero) {
       txt = dernier.prose || dernier.intention || "";
     }
     if (txt && typeof txt === "string" && txt.length > 0) {
-      parts.push("\nDernier souvenir \u2014 " + txt);
+      parts.push(txt);
     }
   }
+
+  if (!parts.length) parts.push("Le r\u00eave reprend.");
 
   parts.push("\n\u2014");
   return parts.join("\n");
