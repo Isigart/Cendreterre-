@@ -13,7 +13,6 @@ const EMPTY_WORLD = { pnj: {}, objets: {}, lieux: {}, cles: {}, legacy: [], evt:
 function buildResumeProse(hero) {
   const parts = [];
 
-  // Dernier souvenir
   const hist = hero.hist || [];
   const dernier = hist.slice(-1)[0];
   if (dernier) {
@@ -24,6 +23,9 @@ function buildResumeProse(hero) {
       txt = dernier.prose || dernier.intention || "";
     }
     if (txt && typeof txt === "string" && txt.length > 0) {
+      // Couper \u00e0 la derni\u00e8re phrase compl\u00e8te
+      const lastDot = txt.lastIndexOf(".");
+      if (lastDot > 50) txt = txt.slice(0, lastDot + 1);
       parts.push(txt);
     }
   }
@@ -220,7 +222,7 @@ export default function useGame() {
       let newHero = skipHist ? h : applyFd(h, fd);
 
       if (fd.mort) {
-        const snapshot = { prose: result.slice(0, 400), intention: intention, lieu: newHero.lieu };
+        const snapshot = { prose: result.slice(0, 600), intention: intention, lieu: newHero.lieu };
         const newHist = [...histRef.current, snapshot].slice(-6);
         histRef.current = newHist;
         newHero = { ...newHero, hist: newHist, sceneCount: (h.sceneCount || 0) + 1, dernierChoix: label || intention };
@@ -243,7 +245,7 @@ export default function useGame() {
       }
 
       const snapshot = {
-        prose: result.slice(0, 400),
+        prose: result.slice(0, 600),
         intention: skipHist ? null : intention,
         lieu: newHero.lieu,
       };
