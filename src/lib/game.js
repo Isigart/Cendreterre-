@@ -310,7 +310,7 @@ export function autoFillJournal(hero, world, ld) {
     });
   }
 
-  // Lieux : quand le h\u00e9ros arrive dans un nouveau lieu
+  // Lieux pr\u00e9d\u00e9finis : quand le h\u00e9ros arrive dans un lieu connu
   const key = lieuKey(hero.lieu);
   if (!journal.lieux) journal.lieux = {};
   if (!journal.lieux[key]) {
@@ -318,6 +318,31 @@ export function autoFillJournal(hero, world, ld) {
     if (region) {
       journal.lieux[key] = [region.physique.split(",").slice(0, 2).join(",") + "."];
     }
+  }
+
+  // Lieux invent\u00e9s par Claude (ferme, donjon, village, etc.)
+  if (ld.lieux) {
+    Object.entries(ld.lieux).forEach(([lieuId, data]) => {
+      if (!journal.lieux[lieuId]) {
+        const fragments = [];
+        if (data.courants?.length) fragments.push(data.courants[0]);
+        if (data.scene_state?.length) fragments.push(data.scene_state.slice(0, 2).join(", "));
+        if (data.persistant) fragments.push(data.persistant);
+        if (fragments.length) {
+          journal.lieux[lieuId] = [fragments.join(". ") + "."];
+        }
+      }
+    });
+  }
+
+  // Objets remarquables
+  if (ld.objets) {
+    if (!journal.faune_flore) journal.faune_flore = {};
+    Object.entries(ld.objets).forEach(([id, data]) => {
+      if (data.description && !journal.faune_flore[id]) {
+        journal.faune_flore[id] = [data.description];
+      }
+    });
   }
 
   // Peuples : d\u00e9tecter depuis les PNJ rencontr\u00e9s (via physique_peuples)
