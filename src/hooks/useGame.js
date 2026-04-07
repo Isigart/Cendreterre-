@@ -152,47 +152,6 @@ export default function useGame() {
   }
 
 
-  function handleTutoComplete(tutoResult) {
-    const h = heroRef.current;
-    if (!h) return;
-
-    // Appliquer les r\u00e9sultats du tuto
-    if (tutoResult.hasBarre) {
-      h.inventaire = [...(h.inventaire || []), "barre de fer courte"];
-    }
-
-    // Conditions post-tuto
-    h.conditions = (h.conditions || []).filter(c => !c.includes("d\u00e9sorient\u00e9"));
-    if (tutoResult.scene3Type === "combat") {
-      h.conditions.push("mains qui tremblent");
-    }
-
-    h.lieu = "Hautcendre";
-    heroRef.current = h;
-    setHero(h);
-    saveHero(h);
-
-    // Construire le contexte riche pour la premi\u00e8re sc\u00e8ne LLM
-    const barre = tutoResult.hasBarre ? " Il tient une barre de fer courte dans la main." : " Il n'a rien sur lui.";
-    const scene2 = {
-      dialogue: "Il a parl\u00e9 \u00e0 un fonctionnaire imp\u00e9rial dans la cave \u2014 l'homme \u00e9coutait, notait.",
-      silence: "Un fonctionnaire imp\u00e9rial l'a trouv\u00e9 dans la cave \u2014 il n'a pas r\u00e9pondu \u00e0 ses questions.",
-      physique: "Un fonctionnaire imp\u00e9rial l'a trouv\u00e9 dans la cave \u2014 il a boug\u00e9 et l'homme s'est m\u00e9fi\u00e9.",
-    }[tutoResult.scene2Type] || "";
-    const sortie = {
-      combat: "Il a frapp\u00e9 le fonctionnaire pour sortir. L'homme est \u00e0 terre dans la cave. Quelqu'un au-dessus a entendu du bruit. La garnison va s'en apercevoir. Il a de l'avance \u2014 pas ind\u00e9finiment.",
-      fuite: "Il a pass\u00e9 le fonctionnaire de force et couru dans l'escalier. Un coup de sifflet a retenti derri\u00e8re lui. Peut-\u00eatre rien. Peut-\u00eatre pas.",
-      discretion: "Il s'est gliss\u00e9 dans l'ombre pendant que le fonctionnaire cherchait sur les \u00e9tag\u00e8res. Il est sorti sans \u00eatre vu. Personne ne sait qu'il \u00e9tait l\u00e0. Il a le temps.",
-      dialogue: "Il a donn\u00e9 une explication au fonctionnaire, qui l'a laiss\u00e9 passer. Pas d'alerte. L'homme lui a dit de passer par le bureau la prochaine fois.",
-      autre: "Il est sorti de justesse apr\u00e8s que le fonctionnaire a siffl\u00e9 deux fois. Des pas au-dessus. C'est serr\u00e9.",
-    }[tutoResult.scene3Type] || "";
-
-    const ouverture = "premi\u00e8re sc\u00e8ne apr\u00e8s le tuto \u2014 le h\u00e9ros vient de sortir d'une cave sous un b\u00e2timent de Hautcendre." + barre + " " + scene2 + " " + sortie + " Il est maintenant dehors, dans une ruelle de Hautcendre. Pierre noire, lampes \u00e0 circuit, bruit de la ville au-dessus. C'est le matin. Il a faim, soif, et ne sait pas o\u00f9 il est exactement.";
-
-    setScreen("jeu");
-    playScene(ouverture, "ouverture", false);
-  }
-
   function choisirPeuple(peuple) {
     setPendingPeuple(peuple);
     setScreen("creation_metier");
@@ -213,6 +172,9 @@ export default function useGame() {
     h.id = "hero_" + Date.now();
     h.clesDepart = { ...worldRef.current.cles };
     h.lastActiveJour = worldRef.current.jour || 1;
+    // Premier h\u00e9ros : spawn aux Coteaux
+    const isFirst = !worldRef.current.legacy?.length && heroes.length === 0;
+    if (isFirst) h.lieu = "Les Coteaux";
     heroRef.current = h;
     histRef.current = [];
     setHero(h);
@@ -221,14 +183,8 @@ export default function useGame() {
     worldRef.current = { ...worldRef.current, journal: autoFillJournal(h, worldRef.current, {}) };
     await saveWorld(worldRef.current);
     setProse(""); setErr(null); setRateLimit(false);
-    // Premier h\u00e9ros : tuto. Suivants : directement dans le monde.
-    const isFirst = !worldRef.current.legacy?.length && heroes.length <= 1;
-    if (isFirst) {
-      setScreen("tuto");
-    } else {
-      setScreen("jeu");
-      playScene(OUVERTURE_SURVIE, "ouverture", false);
-    }
+    setScreen("jeu");
+    playScene(OUVERTURE_SURVIE, "ouverture", false);
   }
 
   async function playScene(intention, label, skipHist) {
@@ -427,7 +383,6 @@ export default function useGame() {
     handleIntro,
     switchHero,
     pauseHero,
-    handleTutoComplete,
     choisirPeuple,
     choisirMetier,
     confirmerHero,

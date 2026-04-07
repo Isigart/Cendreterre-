@@ -2,7 +2,6 @@ import "./styles/global.css";
 import { C } from "./styles/theme.js";
 import useGame from "./hooks/useGame.js";
 import IntroScreen from "./components/IntroScreen.jsx";
-import TutoScreen from "./components/TutoScreen.jsx";
 import PeupleScreen from "./components/PeupleScreen.jsx";
 import MetierScreen from "./components/MetierScreen.jsx";
 import NomScreen from "./components/NomScreen.jsx";
@@ -59,10 +58,6 @@ export default function App() {
           onConfirm={game.confirmerHero}
           onBack={() => game.setScreen("creation_metier")}
         />
-      )}
-
-      {game.screen === "tuto" && (
-        <TutoScreen onComplete={game.handleTutoComplete} />
       )}
 
       {game.screen === "journal" && (
