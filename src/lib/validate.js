@@ -116,14 +116,9 @@ export function validateLd(ld) {
     if (Object.keys(cles).length) clean.cles = cles;
   }
 
-  // en_suspens
-  if (ld.en_suspens && Array.isArray(ld.en_suspens)) {
-    clean.en_suspens = ld.en_suspens.filter(s => typeof s === "string").slice(0, 5);
-  }
-
   // consequences
   if (ld.consequences && Array.isArray(ld.consequences)) {
-    clean.consequences = ld.consequences.filter(s => typeof s === "string").slice(0, 5);
+    clean.consequences = ld.consequences.filter(s => typeof s === "string").slice(0, 8);
   }
 
   // meteo

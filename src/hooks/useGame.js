@@ -8,7 +8,7 @@ import { OUVERTURE_SURVIE } from "../data/narration.js";
 import { PEUPLES } from "../data/peuples.js";
 import { LIEUX_BASE, lieuKey } from "../data/lieux.js";
 
-const EMPTY_WORLD = { pnj: {}, objets: {}, fils: [], lieux: {}, cles: {}, legacy: [], evt: {} };
+const EMPTY_WORLD = { pnj: {}, objets: {}, lieux: {}, cles: {}, legacy: [], evt: {} };
 
 function buildResumeProse(hero) {
   const parts = [];
