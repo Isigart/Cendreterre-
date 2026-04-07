@@ -4,6 +4,7 @@ import { PEUPLES, METIERS } from "../data/peuples.js";
 import { randomPrenom } from "../data/prenoms.js";
 import { buildLoreCtx } from "../data/lore.js";
 import { buildPnjCtx } from "../data/pnj.js";
+import { buildArcsCtx, buildClesCtx } from "../data/arcs.js";
 
 export function initHero(peuple, metier, nom, genre) {
   const lieu = peuple.lieu[Math.floor(Math.random() * peuple.lieu.length)];
@@ -139,6 +140,13 @@ export function buildCtx(hero, world, hist, intention) {
     parts.push("");
     parts.push(pnjLore);
   }
+
+  // Arcs narratifs et cl\u00e9s (filtr\u00e9s par profil/lieu/peuple)
+  const arcsCtx = buildArcsCtx(profil, hero.peuple.id, key);
+  if (arcsCtx) { parts.push(""); parts.push(arcsCtx); }
+
+  const clesCtx = buildClesCtx(hero.peuple.id, key, world.cles || {});
+  if (clesCtx) { parts.push(""); parts.push(clesCtx); }
 
   const lieuData = (world.lieux || {})[key];
   if (lieuData) {
