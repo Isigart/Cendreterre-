@@ -2,7 +2,7 @@ import { LIEUX_BASE, PHYSIQUE_PEUPLES, lieuKey, getDistances } from "../data/lie
 import { PROFIL_DIRECTIVE, profilNarratif } from "../data/narration.js";
 import { PEUPLES, METIERS } from "../data/peuples.js";
 import { randomPrenom } from "../data/prenoms.js";
-import { getCompetencesInitiales, NIVEAUX } from "../data/competences.js";
+import { getCompetencesInitiales, NIVEAUX, canLearnCompetence } from "../data/competences.js";
 import { buildLoreCtx } from "../data/lore.js";
 import { buildPnjCtx } from "../data/pnj.js";
 import { buildArcsCtx, buildClesCtx } from "../data/arcs.js";
@@ -293,6 +293,8 @@ export function applyFd(hero, fd) {
     const comps = { ...(hero.competences || {}) };
     Object.entries(fd.competences_up).forEach(([skill, level]) => {
       if (typeof skill !== "string" || typeof level !== "string") return;
+      // Bloquer les comp\u00e9tences sp\u00e9ciales pour les mauvais peuples
+      if (!canLearnCompetence(hero.peuple?.id, skill)) return;
       const newIdx = NIVEAUX.indexOf(level);
       if (newIdx < 0) return;
       const current = comps[skill];

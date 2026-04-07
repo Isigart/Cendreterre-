@@ -106,7 +106,7 @@ R\u00e8gles :
 - Un novice galère. Un apprenti se d\u00e9brouille. Un comp\u00e9tent est fiable. Un expert surprend rarement. Un ma\u00eetre est exceptionnel.
 - Les conditions modifient tout : bless\u00e9 \u2192 actions physiques compromises. Affam\u00e9 \u2192 moins pr\u00e9cis.
 - fd.competences_up:{"combat":"apprenti"} quand le h\u00e9ros progresse par l'action. Pas gratuit \u2014 il faut avoir pratiqu\u00e9 plusieurs fois ou appris d'un mentor.
-- Les comp\u00e9tences sp\u00e9ciales (chant, chakra, runes, tatouage, foi) ne s'acqui\u00e8rent qu'au contact du peuple concern\u00e9.
+- Comp\u00e9tences sp\u00e9ciales BLOQU\u00c9ES par peuple : chant=Sonneurs uniquement, chakra=Sylvains uniquement, runes=Foulards uniquement, tatouage=Agritans uniquement, foi=Ratainiens uniquement. Un Cendreux ne peut PAS apprendre le chant. Ne jamais \u00e9mettre un competences_up pour une comp\u00e9tence bloqu\u00e9e.
 
 CONDITIONS \u2014 SYST\u00c8ME CENTRAL
 Le champ conditions= dans le CTX liste les \u00e9tats actifs du h\u00e9ros. Trois types :

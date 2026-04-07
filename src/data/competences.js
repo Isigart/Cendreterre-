@@ -68,7 +68,22 @@ export const COMPETENCES_METIER = {
 // Sans m\u00e9tier = rien
 export const COMPETENCES_DEFAUT = {};
 
+// Comp\u00e9tences sp\u00e9ciales bloqu\u00e9es par peuple
+export const COMPETENCES_BLOQUEES = {
+  chant:    ["sonneur"],      // seuls les Sonneurs
+  chakra:   ["sylvain"],      // seuls les Sylvains
+  runes:    ["foulard"],      // seuls les Foulards
+  tatouage: ["agritan"],      // seuls les Agritans
+  foi:      ["ratainien"],    // tout le monde peut croire, mais seuls les Ratainiens re\u00e7oivent des r\u00e9ponses
+};
+
 export function getCompetencesInitiales(metierId) {
   if (!metierId) return { ...COMPETENCES_DEFAUT };
   return { ...(COMPETENCES_METIER[metierId] || COMPETENCES_DEFAUT) };
+}
+
+export function canLearnCompetence(peupleId, competence) {
+  const restriction = COMPETENCES_BLOQUEES[competence];
+  if (!restriction) return true;
+  return restriction.includes(peupleId);
 }
