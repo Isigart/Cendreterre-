@@ -304,72 +304,83 @@ export function applyFd(hero, fd) {
 }
 
 export function autoFillJournal(hero, world, ld) {
-  const journal = { ...(world.journal || {}) };
+  const journal = {};
+  // Copie profonde des cat\u00e9gories existantes
+  Object.entries(world.journal || {}).forEach(([cat, entries]) => {
+    journal[cat] = {};
+    Object.entries(entries).forEach(([id, frags]) => {
+      journal[cat][id] = [...frags];
+    });
+  });
 
-  // PNJ : chaque nouveau PNJ ou PNJ mis \u00e0 jour alimente le journal
+  function normKey(str) {
+    return (str || "").toLowerCase().trim()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\s'\-]+/g, "_");
+  }
+
+  function addFragment(categorie, id, fragment) {
+    if (!fragment || typeof fragment !== "string") return;
+    const normId = normKey(id);
+    if (!normId) return;
+    if (!journal[categorie]) journal[categorie] = {};
+    const existing = journal[categorie][normId] || [];
+    // V\u00e9rifier doublon (comparaison souple sur les 40 premiers chars)
+    const fragNorm = fragment.toLowerCase().slice(0, 40);
+    if (existing.some(f => f.toLowerCase().slice(0, 40) === fragNorm)) return;
+    journal[categorie][normId] = [...existing, fragment].slice(-8);
+  }
+
+  // PNJ
   if (ld.pnj) {
-    if (!journal.pnj) journal.pnj = {};
     Object.entries(ld.pnj).forEach(([nom, data]) => {
-      const existing = journal.pnj[nom] || [];
-      // Premier contact : ajouter la description
-      if (data.description && !existing.some(f => f.includes(data.description.slice(0, 30)))) {
-        journal.pnj[nom] = [...existing, data.description].slice(-8);
-      }
+      if (data.description) addFragment("pnj", nom, data.description);
     });
   }
 
-  // Lieux pr\u00e9d\u00e9finis : quand le h\u00e9ros arrive dans un lieu connu
+  // Lieux pr\u00e9d\u00e9finis
   const key = lieuKey(hero.lieu);
-  if (!journal.lieux) journal.lieux = {};
-  if (!journal.lieux[key]) {
+  if (!journal.lieux?.[key]) {
     const region = LIEUX_BASE[key];
     if (region) {
-      journal.lieux[key] = [region.physique.split(",").slice(0, 2).join(",") + "."];
+      addFragment("lieux", key, region.physique.split(",").slice(0, 2).join(",") + ".");
     }
   }
 
-  // Lieux invent\u00e9s par Claude (ferme, donjon, village, etc.)
+  // Lieux invent\u00e9s par Claude
   if (ld.lieux) {
     Object.entries(ld.lieux).forEach(([lieuId, data]) => {
-      const normId = lieuKey(lieuId);
-      if (!normId || journal.lieux[normId] || journal.lieux[lieuId]) return;
-      // Ne pas dupliquer un lieu pr\u00e9d\u00e9fini
-      if (LIEUX_BASE[normId]) return;
+      const normId = normKey(lieuId);
+      if (!normId || LIEUX_BASE[normId] || journal.lieux?.[normId]) return;
       const fragments = [];
       if (data.courants?.length) fragments.push(data.courants[0]);
       if (data.scene_state?.length) fragments.push(data.scene_state.slice(0, 2).join(", "));
       if (data.persistant) fragments.push(data.persistant);
-      if (fragments.length) {
-        journal.lieux[normId] = [fragments.join(". ") + "."];
-      }
+      if (fragments.length) addFragment("lieux", normId, fragments.join(". ") + ".");
     });
   }
 
-  // Objets remarquables
+  // Objets
   if (ld.objets) {
-    if (!journal.faune_flore) journal.faune_flore = {};
     Object.entries(ld.objets).forEach(([id, data]) => {
-      if (data.description && !journal.faune_flore[id]) {
-        journal.faune_flore[id] = [data.description];
-      }
+      if (data.description) addFragment("faune_flore", id, data.description);
     });
   }
 
-  // Peuples : d\u00e9tecter depuis les PNJ rencontr\u00e9s (via physique_peuples)
+  // Peuples
   if (ld.pnj) {
-    if (!journal.peuples) journal.peuples = {};
     Object.entries(ld.pnj).forEach(([nom, data]) => {
-      if (data.description) {
-        const desc = data.description.toLowerCase();
-        Object.entries(PHYSIQUE_PEUPLES).forEach(([peupleId, physique]) => {
-          // V\u00e9rifier si la description du PNJ correspond \u00e0 un peuple
-          const traits = physique.split(",").map(t => t.trim().split(" ")[0]);
-          const match = traits.some(t => t.length > 4 && desc.includes(t.toLowerCase()));
-          if (match && !journal.peuples[peupleId]) {
-            journal.peuples[peupleId] = ["Rencontr\u00e9 via " + nom + "."];
-          }
-        });
-      }
+      if (!data.description) return;
+      const desc = data.description.toLowerCase();
+      Object.entries(PHYSIQUE_PEUPLES).forEach(([peupleId, physique]) => {
+        if (journal.peuples?.[peupleId]) return;
+        // Matcher sur 2+ traits de 5+ caract\u00e8res
+        const traits = physique.split(",").map(t => t.trim().toLowerCase());
+        const matchCount = traits.filter(t => t.length > 5 && desc.includes(t)).length;
+        if (matchCount >= 2) {
+          addFragment("peuples", peupleId, "Rencontr\u00e9 via " + nom + ".");
+        }
+      });
     });
   }
 
@@ -445,16 +456,21 @@ export function applyLd(world, ld) {
   // Journal de connaissance du joueur
   if (ld.journal && typeof ld.journal === "object") {
     const journal = { ...(world.journal || {}) };
+    function normJournalKey(str) {
+      return (str || "").toLowerCase().trim()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s'\-]+/g, "_");
+    }
     Object.entries(ld.journal).forEach(([categorie, entries]) => {
       if (typeof entries !== "object" || Array.isArray(entries)) return;
       if (!journal[categorie]) journal[categorie] = {};
       Object.entries(entries).forEach(([id, fragment]) => {
         if (typeof fragment !== "string") return;
-        // Normaliser la cl\u00e9 pour les lieux
-        const normId = categorie === "lieux" ? lieuKey(id) : id;
+        const normId = normJournalKey(id);
+        if (!normId) return;
         const existing = journal[categorie][normId] || [];
-        // Ne pas ajouter de doublon
-        if (!existing.some(f => f.toLowerCase() === fragment.toLowerCase())) {
+        const fragNorm = fragment.toLowerCase().slice(0, 40);
+        if (!existing.some(f => f.toLowerCase().slice(0, 40) === fragNorm)) {
           journal[categorie][normId] = [...existing, fragment].slice(-8);
         }
       });
