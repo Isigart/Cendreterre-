@@ -331,14 +331,15 @@ export function autoFillJournal(hero, world, ld) {
   // Lieux invent\u00e9s par Claude (ferme, donjon, village, etc.)
   if (ld.lieux) {
     Object.entries(ld.lieux).forEach(([lieuId, data]) => {
-      if (!journal.lieux[lieuId]) {
-        const fragments = [];
-        if (data.courants?.length) fragments.push(data.courants[0]);
-        if (data.scene_state?.length) fragments.push(data.scene_state.slice(0, 2).join(", "));
-        if (data.persistant) fragments.push(data.persistant);
-        if (fragments.length) {
-          journal.lieux[lieuId] = [fragments.join(". ") + "."];
-        }
+      const normId = lieuKey(lieuId);
+      if (!normId || journal.lieux[normId] || journal.lieux[lieuId]) return;
+      if (LIEUX_BASE[normId]) return;
+      const fragments = [];
+      if (data.courants?.length) fragments.push(data.courants[0]);
+      if (data.scene_state?.length) fragments.push(data.scene_state.slice(0, 2).join(", "));
+      if (data.persistant) fragments.push(data.persistant);
+      if (fragments.length) {
+        journal.lieux[normId] = [fragments.join(". ") + "."];
       }
     });
   }
@@ -448,10 +449,10 @@ export function applyLd(world, ld) {
       if (!journal[categorie]) journal[categorie] = {};
       Object.entries(entries).forEach(([id, fragment]) => {
         if (typeof fragment !== "string") return;
-        const existing = journal[categorie][id] || [];
-        // Ne pas ajouter de doublon
+        const normId = categorie === "lieux" ? lieuKey(id) : id;
+        const existing = journal[categorie][normId] || [];
         if (!existing.some(f => f.toLowerCase() === fragment.toLowerCase())) {
-          journal[categorie][id] = [...existing, fragment].slice(-8);
+          journal[categorie][normId] = [...existing, fragment].slice(-8);
         }
       });
     });
